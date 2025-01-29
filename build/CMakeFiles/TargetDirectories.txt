@@ -1,0 +1,3 @@
+/Library/Projects/Vulkan/RT/build/CMakeFiles/rebuild_cache.dir
+/Library/Projects/Vulkan/RT/build/CMakeFiles/edit_cache.dir
+/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir

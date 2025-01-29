@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Library/Projects/Vulkan/RT/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -o CMakeFiles/RT.dir/main.cpp.o -c /Library/Projects/Vulkan/RT/main.cpp",
+  "file": "/Library/Projects/Vulkan/RT/main.cpp"
+}
+]
