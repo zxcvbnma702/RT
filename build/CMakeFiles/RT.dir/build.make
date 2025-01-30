@@ -76,30 +76,45 @@ include CMakeFiles/RT.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/RT.dir/flags.make
 
-CMakeFiles/RT.dir/main.cpp.o: CMakeFiles/RT.dir/flags.make
-CMakeFiles/RT.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Library/Projects/Vulkan/RT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/RT.dir/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RT.dir/main.cpp.o -c /Library/Projects/Vulkan/RT/main.cpp
+CMakeFiles/RT.dir/src/main.cpp.o: CMakeFiles/RT.dir/flags.make
+CMakeFiles/RT.dir/src/main.cpp.o: ../src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Library/Projects/Vulkan/RT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/RT.dir/src/main.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RT.dir/src/main.cpp.o -c /Library/Projects/Vulkan/RT/src/main.cpp
 
-CMakeFiles/RT.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RT.dir/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Library/Projects/Vulkan/RT/main.cpp > CMakeFiles/RT.dir/main.cpp.i
+CMakeFiles/RT.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RT.dir/src/main.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Library/Projects/Vulkan/RT/src/main.cpp > CMakeFiles/RT.dir/src/main.cpp.i
 
-CMakeFiles/RT.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RT.dir/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Library/Projects/Vulkan/RT/main.cpp -o CMakeFiles/RT.dir/main.cpp.s
+CMakeFiles/RT.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RT.dir/src/main.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Library/Projects/Vulkan/RT/src/main.cpp -o CMakeFiles/RT.dir/src/main.cpp.s
+
+CMakeFiles/RT.dir/src/CApp.cpp.o: CMakeFiles/RT.dir/flags.make
+CMakeFiles/RT.dir/src/CApp.cpp.o: ../src/CApp.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Library/Projects/Vulkan/RT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/RT.dir/src/CApp.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RT.dir/src/CApp.cpp.o -c /Library/Projects/Vulkan/RT/src/CApp.cpp
+
+CMakeFiles/RT.dir/src/CApp.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RT.dir/src/CApp.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Library/Projects/Vulkan/RT/src/CApp.cpp > CMakeFiles/RT.dir/src/CApp.cpp.i
+
+CMakeFiles/RT.dir/src/CApp.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RT.dir/src/CApp.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Library/Projects/Vulkan/RT/src/CApp.cpp -o CMakeFiles/RT.dir/src/CApp.cpp.s
 
 # Object files for target RT
 RT_OBJECTS = \
-"CMakeFiles/RT.dir/main.cpp.o"
+"CMakeFiles/RT.dir/src/main.cpp.o" \
+"CMakeFiles/RT.dir/src/CApp.cpp.o"
 
 # External object files for target RT
 RT_EXTERNAL_OBJECTS =
 
-RT: CMakeFiles/RT.dir/main.cpp.o
+RT: CMakeFiles/RT.dir/src/main.cpp.o
+RT: CMakeFiles/RT.dir/src/CApp.cpp.o
 RT: CMakeFiles/RT.dir/build.make
 RT: CMakeFiles/RT.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Library/Projects/Vulkan/RT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable RT"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Library/Projects/Vulkan/RT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable RT"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/RT.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -6,11 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/Library/Projects/Vulkan/RT/main.cpp
-iostream
--
+../include/CApp.h
 SDL.h
 -
+
+/Library/Projects/Vulkan/RT/src/CApp.cpp
+CApp.h
+/Library/Projects/Vulkan/RT/src/CApp.h
 
 /Library/Vulkan/macOS/include/SDL2/SDL.h
 SDL_main.h
