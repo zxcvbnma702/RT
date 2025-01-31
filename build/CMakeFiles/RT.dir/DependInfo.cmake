@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Library/Projects/Vulkan/RT/src/CApp.cpp" "/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir/src/CApp.cpp.o"
+  "/Library/Projects/Vulkan/RT/src/image.cpp" "/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir/src/image.cpp.o"
   "/Library/Projects/Vulkan/RT/src/main.cpp" "/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir/src/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")

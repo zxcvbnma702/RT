@@ -3,6 +3,10 @@ project(RT VERSION 0.1.0 LANGUAGES C CXX)
 
 set(MY_LIBRARY_DIR /Library/Vulkan/macOS)
 
+# 设置C++ 17标准
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # third library
@@ -21,6 +25,7 @@ link_directories(${SDL_LIB_DIR})
 set(SOURCE_FILES
     src/main.cpp
     src/CApp.cpp
+    src/image.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})

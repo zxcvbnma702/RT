@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/Library/Vulkan/macOS/include/SDL2"
+                "/Library/Vulkan/macOS/include/SDL2",
+                "${workspaceFolder}/include"
             ],
             "defines": [],
             "compileCommands": [
