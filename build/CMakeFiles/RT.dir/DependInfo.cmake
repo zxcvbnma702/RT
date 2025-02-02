@@ -5,8 +5,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Library/Projects/Vulkan/RT/src/CApp.cpp" "/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir/src/CApp.cpp.o"
+  "/Library/Projects/Vulkan/RT/src/camera.cpp" "/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir/src/camera.cpp.o"
   "/Library/Projects/Vulkan/RT/src/image.cpp" "/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir/src/image.cpp.o"
   "/Library/Projects/Vulkan/RT/src/main.cpp" "/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir/src/main.cpp.o"
+  "/Library/Projects/Vulkan/RT/src/ray.cpp" "/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir/src/ray.cpp.o"
+  "/Library/Projects/Vulkan/RT/src/scene.cpp" "/Library/Projects/Vulkan/RT/build/CMakeFiles/RT.dir/src/scene.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
@@ -14,6 +17,7 @@ set(CMAKE_CXX_COMPILER_ID "AppleClang")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/Library/Vulkan/macOS/include/SDL2"
   "../include"
+  "../qbLinAlg"
   )
 
 # Targets to which this target links.

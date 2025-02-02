@@ -20,12 +20,16 @@ link_libraries(SDL2-2.0.0)
 
 # library
 include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/qbLinAlg)
 link_directories(${SDL_LIB_DIR})
 
 set(SOURCE_FILES
     src/main.cpp
     src/CApp.cpp
     src/image.cpp
+    src/scene.cpp
+    src/ray.cpp
+    src/camera.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})

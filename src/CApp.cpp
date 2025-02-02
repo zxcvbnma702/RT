@@ -28,16 +28,21 @@ bool CApp::OnInit()
 
         m_Image.Initialize(1280, 720, pRenderer);
 
-        // Create some color variation
-        for (int x = 0; x < 1280; ++x)
-        {
-            for (int y = 0; y < 720; ++y)
-            {
-                auto red = (static_cast<double>(x) / 1280.0) * 255.0;
-                auto green = (static_cast<double>(y) / 720.0) * 255.0;
-                m_Image.SetPixel(x, y, red, green, 0.0);
-            }
-        }
+        RT::Camrera testCamera;
+        testCamera.SetPosition(qbVector<double>(std::vector<double>{0.0, 0.0, 0.0}));
+        testCamera.SetLookAt(qbVector<double>(std::vector<double>{0.0, 2.0, 0.0}));
+        testCamera.SetUp(qbVector<double>(std::vector<double>{0.0, 0.0, 1.0}));
+        testCamera.SetLength(1.0);
+        testCamera.SetHorizentalSize(1.0);
+        testCamera.SetAspect(1.0);
+        testCamera.UpdateCameraGeometry();
+
+        auto screenCenter = testCamera.GetScreenCenter();
+        auto screenU = testCamera.GetU();
+        auto screenV = testCamera.GetV();
+        PrintVector(screenCenter);
+        PrintVector(screenU);
+        PrintVector(screenV);
     }
     else
     {
@@ -85,6 +90,9 @@ void CApp::OnRender()
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 0);
     SDL_RenderClear(pRenderer);
 
+    // Render the scene
+    m_Scene.Render(m_Image);
+
     m_Image.Display();
 
     SDL_RenderPresent(pRenderer);
@@ -96,4 +104,13 @@ void CApp::OnExit()
     SDL_DestroyWindow(pWindow);
     pWindow = nullptr;
     SDL_Quit();
+}
+
+void CApp::PrintVector(const qbVector<double> &inputVector)
+{
+    int nRows = inputVector.GetNumDims();
+    for (int row = 0; row < nRows; row++)
+    {
+        std::cout << std::fixed << std::setprecision(3) << inputVector.GetElement(row) << std::endl;
+    }
 }

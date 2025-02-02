@@ -19,6 +19,10 @@ public:
     // Function to return the image to display
     void Display();
 
+    // Functions for return the dimensions of the image
+    int GetXSize() { return m_xSize; }
+    int GetYSize() { return m_ySize; }
+
 private:
     Uint32 ConvertColor(const double red, const double green, const double blue);
     void InitTexture();

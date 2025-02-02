@@ -2,6 +2,9 @@
 
 #include <SDL.h>
 #include "image.hpp"
+#include "scene.hpp"
+#include "camera.hpp"
+#include "qbVector.h"
 
 class CApp
 {
@@ -16,7 +19,12 @@ public:
     void OnExit();
 
 private:
+    void PrintVector(const qbVector<double> &inputVector);
+
+private:
     Image m_Image;
+
+    RT::Scene m_Scene;
 
     bool isRunning;
     SDL_Window *pWindow;

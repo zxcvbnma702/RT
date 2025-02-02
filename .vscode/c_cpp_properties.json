@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/Library/Vulkan/macOS/include/SDL2",
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/qbLinAlg"
             ],
             "defines": [],
             "compileCommands": [

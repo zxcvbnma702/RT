@@ -1,17 +1,32 @@
 [
 {
   "directory": "/Library/Projects/Vulkan/RT/build",
-  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -I/Library/Projects/Vulkan/RT/include -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -std=c++17 -o CMakeFiles/RT.dir/src/main.cpp.o -c /Library/Projects/Vulkan/RT/src/main.cpp",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -I/Library/Projects/Vulkan/RT/include -I/Library/Projects/Vulkan/RT/qbLinAlg -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -std=c++17 -o CMakeFiles/RT.dir/src/main.cpp.o -c /Library/Projects/Vulkan/RT/src/main.cpp",
   "file": "/Library/Projects/Vulkan/RT/src/main.cpp"
 },
 {
   "directory": "/Library/Projects/Vulkan/RT/build",
-  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -I/Library/Projects/Vulkan/RT/include -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -std=c++17 -o CMakeFiles/RT.dir/src/CApp.cpp.o -c /Library/Projects/Vulkan/RT/src/CApp.cpp",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -I/Library/Projects/Vulkan/RT/include -I/Library/Projects/Vulkan/RT/qbLinAlg -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -std=c++17 -o CMakeFiles/RT.dir/src/CApp.cpp.o -c /Library/Projects/Vulkan/RT/src/CApp.cpp",
   "file": "/Library/Projects/Vulkan/RT/src/CApp.cpp"
 },
 {
   "directory": "/Library/Projects/Vulkan/RT/build",
-  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -I/Library/Projects/Vulkan/RT/include -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -std=c++17 -o CMakeFiles/RT.dir/src/image.cpp.o -c /Library/Projects/Vulkan/RT/src/image.cpp",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -I/Library/Projects/Vulkan/RT/include -I/Library/Projects/Vulkan/RT/qbLinAlg -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -std=c++17 -o CMakeFiles/RT.dir/src/image.cpp.o -c /Library/Projects/Vulkan/RT/src/image.cpp",
   "file": "/Library/Projects/Vulkan/RT/src/image.cpp"
+},
+{
+  "directory": "/Library/Projects/Vulkan/RT/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -I/Library/Projects/Vulkan/RT/include -I/Library/Projects/Vulkan/RT/qbLinAlg -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -std=c++17 -o CMakeFiles/RT.dir/src/scene.cpp.o -c /Library/Projects/Vulkan/RT/src/scene.cpp",
+  "file": "/Library/Projects/Vulkan/RT/src/scene.cpp"
+},
+{
+  "directory": "/Library/Projects/Vulkan/RT/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -I/Library/Projects/Vulkan/RT/include -I/Library/Projects/Vulkan/RT/qbLinAlg -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -std=c++17 -o CMakeFiles/RT.dir/src/ray.cpp.o -c /Library/Projects/Vulkan/RT/src/ray.cpp",
+  "file": "/Library/Projects/Vulkan/RT/src/ray.cpp"
+},
+{
+  "directory": "/Library/Projects/Vulkan/RT/build",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Library/Vulkan/macOS/include/SDL2 -I/Library/Projects/Vulkan/RT/include -I/Library/Projects/Vulkan/RT/qbLinAlg -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.6 -std=c++17 -o CMakeFiles/RT.dir/src/camera.cpp.o -c /Library/Projects/Vulkan/RT/src/camera.cpp",
+  "file": "/Library/Projects/Vulkan/RT/src/camera.cpp"
 }
 ]
