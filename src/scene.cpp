@@ -8,6 +8,15 @@ RT::Scene::Scene()
     m_Camera.SetHorizentalSize(0.25);
     m_Camera.SetAspect(16.0 / 9.0);
     m_Camera.UpdateCameraGeometry();
+
+    // Construct a test sphere
+    m_ObjectList.push_back(std::make_shared<RT::ObjectSphere>());
+
+    // test Light
+    // Construct a test light.
+    m_lightList.push_back(std::make_shared<RT::PointLight>(RT::PointLight()));
+    m_lightList.at(0)->m_Location = qbVector<double>{std::vector<double>{5.0, -10.0, 5.0}};
+    m_lightList.at(0)->m_Color = qbVector<double>{std::vector<double>{255.0, 255.0, 255.0}};
 }
 
 RT::Scene::~Scene()
@@ -38,29 +47,51 @@ bool RT::Scene::Render(Image &image)
 
             m_Camera.GenerateRay(normX, normY, cameraRay);
 
-            bool valid = m_TestSphere.TestIntersections(cameraRay, intPoint, localNormal, localColor);
-
-            if (valid)
+            // 测试🍌
+            for (auto current : m_ObjectList)
             {
-                double dist = (intPoint - cameraRay.m_Point1).norm();
-                std::cout << "distence: " << dist << std::endl;
+                bool valid = current->TestIntersections(cameraRay, intPoint, localNormal, localColor);
 
-                if (dist > maxDist)
+                if (valid)
                 {
-                    maxDist = dist;
-                }
+                    // Compute intensity of illumination.
+                    double intensity;
+                    qbVector<double> color{3};
+                    bool validIllum = false;
+                    for (auto currentLight : m_lightList)
+                    {
+                        validIllum = currentLight->ComputeIllumination(intPoint, localNormal, m_ObjectList, current, color, intensity);
+                    }
 
-                if (dist < minDist)
+                    double dist = (intPoint - cameraRay.m_Point1).norm();
+                    std::cout << "distence: " << dist << std::endl;
+
+                    if (dist > maxDist)
+                    {
+                        maxDist = dist;
+                    }
+
+                    if (dist < minDist)
+                    {
+                        minDist = dist;
+                    }
+
+                    if (validIllum)
+                    {
+                        image.SetPixel(x, y, 255.0 * intensity, 0.0, 0.0);
+                    }
+                    else
+                    {
+                        image.SetPixel(x, y, 0.0, 0.0, 0.0);
+                    }
+                }
+                else
                 {
-                    minDist = dist;
+                    image.SetPixel(x, y, 0.0, 0.0, 0.0);
                 }
+            }
 
-                image.SetPixel(x, y, 255.0 - ((dist - 9.0) / 0.94605) * 255.0, 0.0, 0.0);
-            }
-            else
-            {
-                image.SetPixel(x, y, 0.0, 0.0, 0.0);
-            }
+            // bool valid = m_TestSphere.TestIntersections(cameraRay, intPoint, localNormal, localColor);
         }
     }
 

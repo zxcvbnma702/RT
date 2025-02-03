@@ -4,8 +4,10 @@
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/CApp.h
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/camera.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/image.hpp
+CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/lightBase.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/objectBase.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/objectSphere.hpp
+CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/pointLight.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/ray.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/scene.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../qbLinAlg/qbVector.h
@@ -141,11 +143,19 @@ CMakeFiles/RT.dir/src/image.cpp.o: /Library/Vulkan/macOS/include/SDL2/SDL_video.
 CMakeFiles/RT.dir/src/image.cpp.o: /Library/Vulkan/macOS/include/SDL2/begin_code.h
 CMakeFiles/RT.dir/src/image.cpp.o: /Library/Vulkan/macOS/include/SDL2/close_code.h
 
+CMakeFiles/RT.dir/src/lightBase.cpp.o: ../include/lightBase.hpp
+CMakeFiles/RT.dir/src/lightBase.cpp.o: ../include/objectBase.hpp
+CMakeFiles/RT.dir/src/lightBase.cpp.o: ../include/ray.hpp
+CMakeFiles/RT.dir/src/lightBase.cpp.o: ../qbLinAlg/qbVector.h
+CMakeFiles/RT.dir/src/lightBase.cpp.o: ../src/lightBase.cpp
+
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/CApp.h
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/camera.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/image.hpp
+CMakeFiles/RT.dir/src/main.cpp.o: ../include/lightBase.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/objectBase.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/objectSphere.hpp
+CMakeFiles/RT.dir/src/main.cpp.o: ../include/pointLight.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/ray.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/scene.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../qbLinAlg/qbVector.h
@@ -223,14 +233,23 @@ CMakeFiles/RT.dir/src/objectSphere.cpp.o: ../include/ray.hpp
 CMakeFiles/RT.dir/src/objectSphere.cpp.o: ../qbLinAlg/qbVector.h
 CMakeFiles/RT.dir/src/objectSphere.cpp.o: ../src/objectSphere.cpp
 
+CMakeFiles/RT.dir/src/pointLight.cpp.o: ../include/lightBase.hpp
+CMakeFiles/RT.dir/src/pointLight.cpp.o: ../include/objectBase.hpp
+CMakeFiles/RT.dir/src/pointLight.cpp.o: ../include/pointLight.hpp
+CMakeFiles/RT.dir/src/pointLight.cpp.o: ../include/ray.hpp
+CMakeFiles/RT.dir/src/pointLight.cpp.o: ../qbLinAlg/qbVector.h
+CMakeFiles/RT.dir/src/pointLight.cpp.o: ../src/pointLight.cpp
+
 CMakeFiles/RT.dir/src/ray.cpp.o: ../include/ray.hpp
 CMakeFiles/RT.dir/src/ray.cpp.o: ../qbLinAlg/qbVector.h
 CMakeFiles/RT.dir/src/ray.cpp.o: ../src/ray.cpp
 
 CMakeFiles/RT.dir/src/scene.cpp.o: ../include/camera.hpp
 CMakeFiles/RT.dir/src/scene.cpp.o: ../include/image.hpp
+CMakeFiles/RT.dir/src/scene.cpp.o: ../include/lightBase.hpp
 CMakeFiles/RT.dir/src/scene.cpp.o: ../include/objectBase.hpp
 CMakeFiles/RT.dir/src/scene.cpp.o: ../include/objectSphere.hpp
+CMakeFiles/RT.dir/src/scene.cpp.o: ../include/pointLight.hpp
 CMakeFiles/RT.dir/src/scene.cpp.o: ../include/ray.hpp
 CMakeFiles/RT.dir/src/scene.cpp.o: ../include/scene.hpp
 CMakeFiles/RT.dir/src/scene.cpp.o: ../qbLinAlg/qbVector.h

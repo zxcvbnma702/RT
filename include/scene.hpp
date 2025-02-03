@@ -3,8 +3,10 @@
 #include <vector>
 #include <SDL.h>
 #include <image.hpp>
+#include <memory>
 #include "camera.hpp"
 #include "objectSphere.hpp"
+#include "pointLight.hpp"
 
 namespace RT
 {
@@ -19,6 +21,11 @@ namespace RT
 
     private:
         RT::Camera m_Camera;
-        RT::ObjectSphere m_TestSphere;
+
+        // The list of objects
+        std::vector<std::shared_ptr<RT::ObjectBase>> m_ObjectList;
+
+        // The list of lights in the scene.
+        std::vector<std::shared_ptr<RT::LightBase>> m_lightList;
     };
 }

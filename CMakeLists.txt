@@ -32,6 +32,8 @@ set(SOURCE_FILES
     src/camera.cpp
     src/objectBase.cpp
     src/objectSphere.cpp
+    src/lightBase.cpp
+    src/pointLight.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})

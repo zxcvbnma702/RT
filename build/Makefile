@@ -223,6 +223,33 @@ src/image.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/image.cpp.s
 .PHONY : src/image.cpp.s
 
+src/lightBase.o: src/lightBase.cpp.o
+
+.PHONY : src/lightBase.o
+
+# target to build an object file
+src/lightBase.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/lightBase.cpp.o
+.PHONY : src/lightBase.cpp.o
+
+src/lightBase.i: src/lightBase.cpp.i
+
+.PHONY : src/lightBase.i
+
+# target to preprocess a source file
+src/lightBase.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/lightBase.cpp.i
+.PHONY : src/lightBase.cpp.i
+
+src/lightBase.s: src/lightBase.cpp.s
+
+.PHONY : src/lightBase.s
+
+# target to generate assembly for a file
+src/lightBase.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/lightBase.cpp.s
+.PHONY : src/lightBase.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -304,6 +331,33 @@ src/objectSphere.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/objectSphere.cpp.s
 .PHONY : src/objectSphere.cpp.s
 
+src/pointLight.o: src/pointLight.cpp.o
+
+.PHONY : src/pointLight.o
+
+# target to build an object file
+src/pointLight.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/pointLight.cpp.o
+.PHONY : src/pointLight.cpp.o
+
+src/pointLight.i: src/pointLight.cpp.i
+
+.PHONY : src/pointLight.i
+
+# target to preprocess a source file
+src/pointLight.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/pointLight.cpp.i
+.PHONY : src/pointLight.cpp.i
+
+src/pointLight.s: src/pointLight.cpp.s
+
+.PHONY : src/pointLight.s
+
+# target to generate assembly for a file
+src/pointLight.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/pointLight.cpp.s
+.PHONY : src/pointLight.cpp.s
+
 src/ray.o: src/ray.cpp.o
 
 .PHONY : src/ray.o
@@ -376,6 +430,9 @@ help:
 	@echo "... src/image.o"
 	@echo "... src/image.i"
 	@echo "... src/image.s"
+	@echo "... src/lightBase.o"
+	@echo "... src/lightBase.i"
+	@echo "... src/lightBase.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
@@ -385,6 +442,9 @@ help:
 	@echo "... src/objectSphere.o"
 	@echo "... src/objectSphere.i"
 	@echo "... src/objectSphere.s"
+	@echo "... src/pointLight.o"
+	@echo "... src/pointLight.i"
+	@echo "... src/pointLight.s"
 	@echo "... src/ray.o"
 	@echo "... src/ray.i"
 	@echo "... src/ray.s"
