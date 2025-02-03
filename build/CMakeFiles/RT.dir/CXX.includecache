@@ -6,11 +6,15 @@
 
 #IncludeRegexTransform: 
 
-../include/camera.hpp
+../include/objectBase.hpp
 qbVector.h
 ../include/qbVector.h
 ray.hpp
 ../include/ray.hpp
+
+../include/objectSphere.hpp
+objectBase.hpp
+../include/objectBase.hpp
 
 ../include/ray.hpp
 qbVector.h
@@ -28,9 +32,9 @@ math.h
 vector
 -
 
-/Library/Projects/Vulkan/RT/src/camera.cpp
-camera.hpp
-/Library/Projects/Vulkan/RT/src/camera.hpp
-math.h
--
+/Library/Projects/Vulkan/RT/src/objectSphere.cpp
+objectSphere.hpp
+/Library/Projects/Vulkan/RT/src/objectSphere.hpp
+ray.hpp
+/Library/Projects/Vulkan/RT/src/ray.hpp
 

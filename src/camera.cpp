@@ -1,7 +1,7 @@
 #include "camera.hpp"
 #include <math.h>
 
-RT::Camrera::Camrera()
+RT::Camera::Camera()
 {
     m_CameraPosition = qbVector<double>{std::vector<double>{0.0, -10.0, 0.0}};
     m_CameraLookAt = qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}};
@@ -12,7 +12,7 @@ RT::Camrera::Camrera()
     m_CameraAspectRatio = 1.0;
 }
 
-RT::Ray RT::Camrera::GenerateRay(float proScreenX, float proScreenY)
+bool RT::Camera::GenerateRay(float proScreenX, float proScreenY, RT::Ray &cameraRay)
 {
     // 计算图像平面的世界坐标
     /**
@@ -21,10 +21,14 @@ RT::Ray RT::Camrera::GenerateRay(float proScreenX, float proScreenY)
     auto screenWorldPart1 = m_ProjectScreenCenter + (m_ProjectScreenU * proScreenX);
     auto screenWorldCoordinate = screenWorldPart1 + (m_ProjectScreenV * proScreenY);
 
-    return RT::Ray(m_CameraPosition, screenWorldCoordinate);
+    cameraRay.m_Point1 = m_CameraPosition;
+    cameraRay.m_Point2 = screenWorldCoordinate;
+    cameraRay.m_Lab = screenWorldCoordinate - m_CameraPosition;
+
+    return true;
 }
 
-void RT::Camrera::UpdateCameraGeometry()
+void RT::Camera::UpdateCameraGeometry()
 {
     // Frist，计算目标点到摄像机位置的 vector
     m_AlimentVector = m_CameraLookAt - m_CameraPosition;

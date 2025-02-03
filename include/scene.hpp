@@ -3,6 +3,8 @@
 #include <vector>
 #include <SDL.h>
 #include <image.hpp>
+#include "camera.hpp"
+#include "objectSphere.hpp"
 
 namespace RT
 {
@@ -16,6 +18,7 @@ namespace RT
         bool Render(Image &image);
 
     private:
-    private:
+        RT::Camera m_Camera;
+        RT::ObjectSphere m_TestSphere;
     };
 }

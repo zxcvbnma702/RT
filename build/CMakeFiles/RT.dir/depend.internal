@@ -5,6 +5,8 @@ CMakeFiles/RT.dir/src/CApp.cpp.o
  ../include/CApp.h
  ../include/camera.hpp
  ../include/image.hpp
+ ../include/objectBase.hpp
+ ../include/objectSphere.hpp
  ../include/ray.hpp
  ../include/scene.hpp
  ../qbLinAlg/qbVector.h
@@ -143,6 +145,8 @@ CMakeFiles/RT.dir/src/main.cpp.o
  ../include/CApp.h
  ../include/camera.hpp
  ../include/image.hpp
+ ../include/objectBase.hpp
+ ../include/objectSphere.hpp
  ../include/ray.hpp
  ../include/scene.hpp
  ../qbLinAlg/qbVector.h
@@ -208,13 +212,29 @@ CMakeFiles/RT.dir/src/main.cpp.o
  /Library/Vulkan/macOS/include/SDL2/SDL_video.h
  /Library/Vulkan/macOS/include/SDL2/begin_code.h
  /Library/Vulkan/macOS/include/SDL2/close_code.h
+CMakeFiles/RT.dir/src/objectBase.cpp.o
+ ../include/objectBase.hpp
+ ../include/ray.hpp
+ ../qbLinAlg/qbVector.h
+ /Library/Projects/Vulkan/RT/src/objectBase.cpp
+CMakeFiles/RT.dir/src/objectSphere.cpp.o
+ ../include/objectBase.hpp
+ ../include/objectSphere.hpp
+ ../include/ray.hpp
+ ../qbLinAlg/qbVector.h
+ /Library/Projects/Vulkan/RT/src/objectSphere.cpp
 CMakeFiles/RT.dir/src/ray.cpp.o
  ../include/ray.hpp
  ../qbLinAlg/qbVector.h
  /Library/Projects/Vulkan/RT/src/ray.cpp
 CMakeFiles/RT.dir/src/scene.cpp.o
+ ../include/camera.hpp
  ../include/image.hpp
+ ../include/objectBase.hpp
+ ../include/objectSphere.hpp
+ ../include/ray.hpp
  ../include/scene.hpp
+ ../qbLinAlg/qbVector.h
  /Library/Projects/Vulkan/RT/src/scene.cpp
  /Library/Vulkan/macOS/include/SDL2/SDL.h
  /Library/Vulkan/macOS/include/SDL2/SDL_assert.h

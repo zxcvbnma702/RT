@@ -4,6 +4,8 @@
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/CApp.h
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/camera.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/image.hpp
+CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/objectBase.hpp
+CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/objectSphere.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/ray.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../include/scene.hpp
 CMakeFiles/RT.dir/src/CApp.cpp.o: ../qbLinAlg/qbVector.h
@@ -142,6 +144,8 @@ CMakeFiles/RT.dir/src/image.cpp.o: /Library/Vulkan/macOS/include/SDL2/close_code
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/CApp.h
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/camera.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/image.hpp
+CMakeFiles/RT.dir/src/main.cpp.o: ../include/objectBase.hpp
+CMakeFiles/RT.dir/src/main.cpp.o: ../include/objectSphere.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/ray.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../include/scene.hpp
 CMakeFiles/RT.dir/src/main.cpp.o: ../qbLinAlg/qbVector.h
@@ -208,12 +212,28 @@ CMakeFiles/RT.dir/src/main.cpp.o: /Library/Vulkan/macOS/include/SDL2/SDL_video.h
 CMakeFiles/RT.dir/src/main.cpp.o: /Library/Vulkan/macOS/include/SDL2/begin_code.h
 CMakeFiles/RT.dir/src/main.cpp.o: /Library/Vulkan/macOS/include/SDL2/close_code.h
 
+CMakeFiles/RT.dir/src/objectBase.cpp.o: ../include/objectBase.hpp
+CMakeFiles/RT.dir/src/objectBase.cpp.o: ../include/ray.hpp
+CMakeFiles/RT.dir/src/objectBase.cpp.o: ../qbLinAlg/qbVector.h
+CMakeFiles/RT.dir/src/objectBase.cpp.o: ../src/objectBase.cpp
+
+CMakeFiles/RT.dir/src/objectSphere.cpp.o: ../include/objectBase.hpp
+CMakeFiles/RT.dir/src/objectSphere.cpp.o: ../include/objectSphere.hpp
+CMakeFiles/RT.dir/src/objectSphere.cpp.o: ../include/ray.hpp
+CMakeFiles/RT.dir/src/objectSphere.cpp.o: ../qbLinAlg/qbVector.h
+CMakeFiles/RT.dir/src/objectSphere.cpp.o: ../src/objectSphere.cpp
+
 CMakeFiles/RT.dir/src/ray.cpp.o: ../include/ray.hpp
 CMakeFiles/RT.dir/src/ray.cpp.o: ../qbLinAlg/qbVector.h
 CMakeFiles/RT.dir/src/ray.cpp.o: ../src/ray.cpp
 
+CMakeFiles/RT.dir/src/scene.cpp.o: ../include/camera.hpp
 CMakeFiles/RT.dir/src/scene.cpp.o: ../include/image.hpp
+CMakeFiles/RT.dir/src/scene.cpp.o: ../include/objectBase.hpp
+CMakeFiles/RT.dir/src/scene.cpp.o: ../include/objectSphere.hpp
+CMakeFiles/RT.dir/src/scene.cpp.o: ../include/ray.hpp
 CMakeFiles/RT.dir/src/scene.cpp.o: ../include/scene.hpp
+CMakeFiles/RT.dir/src/scene.cpp.o: ../qbLinAlg/qbVector.h
 CMakeFiles/RT.dir/src/scene.cpp.o: ../src/scene.cpp
 CMakeFiles/RT.dir/src/scene.cpp.o: /Library/Vulkan/macOS/include/SDL2/SDL.h
 CMakeFiles/RT.dir/src/scene.cpp.o: /Library/Vulkan/macOS/include/SDL2/SDL_assert.h

@@ -5,11 +5,11 @@
 
 namespace RT
 {
-    class Camrera
+    class Camera
     {
     public:
-        Camrera(/* args */);
-        ~Camrera() = default;
+        Camera(/* args */);
+        ~Camera() = default;
 
         // Function to set camera paramters
         void SetPosition(const qbVector<double> &newPosition)
@@ -76,7 +76,7 @@ namespace RT
         };
 
         // Function to generate a ray
-        RT::Ray GenerateRay(float proScreenX, float proScreenY);
+        bool GenerateRay(float proScreenX, float proScreenY, RT::Ray &cameraRay);
         // Function to update camera geometry
         void UpdateCameraGeometry();
 

@@ -28,21 +28,13 @@ bool CApp::OnInit()
 
         m_Image.Initialize(1280, 720, pRenderer);
 
-        RT::Camrera testCamera;
-        testCamera.SetPosition(qbVector<double>(std::vector<double>{0.0, 0.0, 0.0}));
-        testCamera.SetLookAt(qbVector<double>(std::vector<double>{0.0, 2.0, 0.0}));
-        testCamera.SetUp(qbVector<double>(std::vector<double>{0.0, 0.0, 1.0}));
-        testCamera.SetLength(1.0);
-        testCamera.SetHorizentalSize(1.0);
-        testCamera.SetAspect(1.0);
-        testCamera.UpdateCameraGeometry();
+        SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+        SDL_RenderClear(pRenderer);
 
-        auto screenCenter = testCamera.GetScreenCenter();
-        auto screenU = testCamera.GetU();
-        auto screenV = testCamera.GetV();
-        PrintVector(screenCenter);
-        PrintVector(screenU);
-        PrintVector(screenV);
+        m_Scene.Render(m_Image);
+        m_Image.Display();
+
+        SDL_RenderPresent(pRenderer);
     }
     else
     {
@@ -87,15 +79,15 @@ void CApp::OnLoop()
 
 void CApp::OnRender()
 {
-    SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 0);
-    SDL_RenderClear(pRenderer);
+    // SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 0);
+    // SDL_RenderClear(pRenderer);
 
-    // Render the scene
-    m_Scene.Render(m_Image);
+    // // Render the scene
+    // m_Scene.Render(m_Image);
 
-    m_Image.Display();
+    // m_Image.Display();
 
-    SDL_RenderPresent(pRenderer);
+    // SDL_RenderPresent(pRenderer);
 }
 
 void CApp::OnExit()

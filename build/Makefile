@@ -250,6 +250,60 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/objectBase.o: src/objectBase.cpp.o
+
+.PHONY : src/objectBase.o
+
+# target to build an object file
+src/objectBase.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/objectBase.cpp.o
+.PHONY : src/objectBase.cpp.o
+
+src/objectBase.i: src/objectBase.cpp.i
+
+.PHONY : src/objectBase.i
+
+# target to preprocess a source file
+src/objectBase.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/objectBase.cpp.i
+.PHONY : src/objectBase.cpp.i
+
+src/objectBase.s: src/objectBase.cpp.s
+
+.PHONY : src/objectBase.s
+
+# target to generate assembly for a file
+src/objectBase.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/objectBase.cpp.s
+.PHONY : src/objectBase.cpp.s
+
+src/objectSphere.o: src/objectSphere.cpp.o
+
+.PHONY : src/objectSphere.o
+
+# target to build an object file
+src/objectSphere.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/objectSphere.cpp.o
+.PHONY : src/objectSphere.cpp.o
+
+src/objectSphere.i: src/objectSphere.cpp.i
+
+.PHONY : src/objectSphere.i
+
+# target to preprocess a source file
+src/objectSphere.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/objectSphere.cpp.i
+.PHONY : src/objectSphere.cpp.i
+
+src/objectSphere.s: src/objectSphere.cpp.s
+
+.PHONY : src/objectSphere.s
+
+# target to generate assembly for a file
+src/objectSphere.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RT.dir/build.make CMakeFiles/RT.dir/src/objectSphere.cpp.s
+.PHONY : src/objectSphere.cpp.s
+
 src/ray.o: src/ray.cpp.o
 
 .PHONY : src/ray.o
@@ -325,6 +379,12 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/objectBase.o"
+	@echo "... src/objectBase.i"
+	@echo "... src/objectBase.s"
+	@echo "... src/objectSphere.o"
+	@echo "... src/objectSphere.i"
+	@echo "... src/objectSphere.s"
 	@echo "... src/ray.o"
 	@echo "... src/ray.i"
 	@echo "... src/ray.s"

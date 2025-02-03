@@ -75,3 +75,13 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 // 该射线的起点为 (0, 0, 0)，
 // 方向为从摄像机位置 (0, 0, 0) 指向图像平面上的坐标 (1, 1, -1) 的向量。
 ```
+
+## Ray - Sphere Intersections
+
+![alt text](image-5.png)
+
+![alt text](image-4.png)
+
+![alt text](image-6.png)
+
+![alt text](image-7.png)

@@ -6,6 +6,7 @@ namespace RT
     class Ray
     {
     public:
+        Ray();
         Ray(const qbVector<double> &point1, const qbVector<double> &point2);
 
         qbVector<double> GetPoint1() const;
@@ -15,5 +16,5 @@ namespace RT
         qbVector<double> m_Point1{3};
         qbVector<double> m_Point2{3};
         qbVector<double> m_Lab{3};
-    };     
+    };
 }
