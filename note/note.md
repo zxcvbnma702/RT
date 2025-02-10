@@ -91,3 +91,48 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 ![alt text](image-8.png)
 
 ![alt text](image-9.png)
+
+## 几何变换
+
+![alt text](image-10.png)
+
+单位矩阵
+
+![alt text](image-11.png)
+
+缩放变换
+
+![alt text](image-13.png)
+
+旋转变换
+
+![alt text](image-12.png)
+
+![alt text](image-14.png)
+
+![alt text](image-15.png)
+
+![alt text](image-16.png)
+
+![alt text](image-17.png)
+
+![alt text](image-18.png)
+
+平移变换
+
+![alt text](image-19.png)
+
+![alt text](image-20.png)
+
+![alt text](image-21.png)
+
+![alt text](image-22.png)
+
+![alt text](image-23.png)
+
+目前定义的球体
+
+![alt text](image-24.png)
+
+有了变换就可以将球体的物理坐标转换为世界坐标，
+> 在3D图形学中，通常我们有一个物体的局部坐标系（例如球体的物理坐标），然后通过一系列变换（平移、旋转、缩放等），将该物体从局部坐标系转换到世界坐标系中。

@@ -36,6 +36,7 @@ set(SOURCE_FILES
     src/objectSphere.cpp
     src/lightBase.cpp
     src/pointLight.cpp
+    src/gtfm.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})
