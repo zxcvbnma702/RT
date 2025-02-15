@@ -1,6 +1,7 @@
 #pragma once
 
 #include "objectBase.hpp"
+#include "gtfm.hpp"
 
 namespace RT
 {

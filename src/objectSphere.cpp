@@ -10,24 +10,28 @@ RT::ObjectSphere::~ObjectSphere()
 }
 
 // 测试给定光线是否与单位球（位于原点，半径为1）相交，并计算交点，法向量
-bool RT::ObjectSphere::TestIntersections(const RT::Ray& castRay, qbVector<double>& intPoint, qbVector<double>& localNormal, qbVector<double>& localColor)
+bool RT::ObjectSphere::TestIntersections(const RT::Ray &castRay, qbVector<double> &intPoint, qbVector<double> &localNormal, qbVector<double> &localColor)
 {
+	// 世界坐标转换为了局部坐标
+	RT::Ray bckRay = m_TransformMatrix.Apply(castRay, RT::BCKTFORM);
+
 	// 获取并标准化光线的方向向量
-	qbVector<double> vhat = castRay.m_Lab;
+	qbVector<double> vhat = bckRay.m_Lab;
 	vhat.Normalize(); // 将方向向量单位化
 
 	// 光线与球的相交满足二次方程形式：a * t^2 + bt + c = 0
 	// 其中，a = 1.0，因为方向向量已经单位化
 
 	// 计算b系数，点乘光线起点和方向向量，再乘以2
-	auto b = 2.0 * qbVector<double>::dot(castRay.m_Point1, vhat);
+	auto b = 2.0 * qbVector<double>::dot(bckRay.m_Point1, vhat);
 
 	// 计算c系数，点乘光线起点自身并减去球的半径平方，半径为1，所以直接减去1.0
-	auto c = qbVector<double>::dot(castRay.m_Point1, castRay.m_Point1) - 1.0;
+	auto c = qbVector<double>::dot(bckRay.m_Point1, bckRay.m_Point1) - 1.0;
 
 	// 计算判别式，判别式决定了二次方程根的性质
 	auto intTest = (b * b) - 4.0 * c;
 
+	qbVector<double> poi;
 	// 如果判别式大于0，表示存在两个实根，即光线与球有两个交点
 	if (intTest > 0.0)
 	{
@@ -51,14 +55,19 @@ bool RT::ObjectSphere::TestIntersections(const RT::Ray& castRay, qbVector<double
 		}
 
 		// 计算交点位置
-		intPoint = castRay.m_Point1 + (vhat * t);
+		poi = bckRay.m_Point1 + (vhat * t);
+
+		// 局部坐标转回世界坐标
+		intPoint = m_TransformMatrix.Apply(poi, RT::FWDTFORM);
 
 		// 计算交点处的法线，法线即为交点位置的单位化向量
-		localNormal = intPoint;
+		qbVector<double> objOrigin = qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}};
+		qbVector<double> newObjOrigin = m_TransformMatrix.Apply(objOrigin, RT::FWDTFORM);
+		localNormal = intPoint - newObjOrigin;
 		localNormal.Normalize();
 
 		// 设置局部颜色（这里假设颜色是常量，可以根据需要进行修改）
-		localColor = qbVector<double>({ 1.0, 1.0, 1.0 }); // 例如白色
+		localColor = m_BaseColor; // 例如白色
 
 		return true; // 返回true，表示光线与球相交
 	}

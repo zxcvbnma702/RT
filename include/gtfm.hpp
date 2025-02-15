@@ -16,6 +16,7 @@ namespace RT {
 
 		GTform(const qbMatrix2<double>& fwd, const qbMatrix2<double>& bck);
 
+        // 平移、旋转、缩放
 		void SetTransform(const qbVector<double>& translation,
 			const qbVector<double>& rotation, const qbVector<double>& scale);
 

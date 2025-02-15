@@ -15,6 +15,7 @@ namespace RT
         LightBase(/* args */);
         virtual ~LightBase();
 
+        // 根据光源的位置、光线的入射角度和局部法线，来确定被照射点的光照强度和颜色。
         virtual bool ComputeIllumination(const qbVector<double> &intPoint, const qbVector<double> &localNormal,
                                          const std::vector<std::shared_ptr<RT::ObjectBase>> &objectList,
                                          const std::shared_ptr<RT::ObjectBase> &currentObject,
