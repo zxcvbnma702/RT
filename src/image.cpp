@@ -15,7 +15,7 @@ Image::~Image()
 	}
 }
 
-void Image::Initialize(const int xSize, const int ySize, SDL_Renderer* pRenderer)
+void Image::Initialize(const int xSize, const int ySize, SDL_Renderer *pRenderer)
 {
 	// Resize image array
 	m_rChannel.resize(xSize, std::vector<double>(ySize, 0.0));
@@ -40,8 +40,11 @@ void Image::SetPixel(const int x, const int y, const double red, const double gr
 
 void Image::Display()
 {
+	// Compute Max value
+	ComputeMaxValue();
+
 	// Allocate memory for a pixel buffer
-	auto* tempPixels = new Uint32[m_xSize * m_ySize];
+	auto *tempPixels = new Uint32[m_xSize * m_ySize];
 	// Clear the piexl buffer
 	memset(tempPixels, 0, m_xSize * m_ySize * sizeof(Uint32));
 
@@ -64,7 +67,7 @@ void Image::Display()
 		.x = 0,
 		.y = 0,
 		.w = m_xSize,
-		.h = m_ySize };
+		.h = m_ySize};
 
 	auto bounds = srcRect;
 
@@ -74,9 +77,9 @@ void Image::Display()
 Uint32 Image::ConvertColor(const double red, const double green, const double blue)
 {
 	// Convert the color to unsigned integers
-	auto r = static_cast<unsigned char>(red);
-	auto g = static_cast<unsigned char>(green);
-	auto b = static_cast<unsigned char>(blue);
+	auto r = static_cast<unsigned char>((red / m_OverAllMax) * 255.0);
+	auto g = static_cast<unsigned char>((green / m_OverAllMax) * 255.0);
+	auto b = static_cast<unsigned char>((blue / m_OverAllMax) * 255.0);
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	// Combine colors in the order ARGB
@@ -110,7 +113,42 @@ void Image::InitTexture()
 		SDL_DestroyTexture(m_pTexture);
 	}
 
-	auto* tempSurface = SDL_CreateRGBSurface(0, m_xSize, m_ySize, 32, rMask, gMask, bMask, aMask);
+	auto *tempSurface = SDL_CreateRGBSurface(0, m_xSize, m_ySize, 32, rMask, gMask, bMask, aMask);
 	m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, tempSurface);
 	SDL_FreeSurface(tempSurface);
+}
+
+void Image::ComputeMaxValue()
+{
+	m_MaxRed = 0.0;
+	m_MaxGreen = 0.0;
+	m_MaxBlue = 0.0;
+	m_OverAllMax = 0.0;
+	for (int x = 0; x < m_xSize; ++x)
+	{
+		for (int y = 0; y < m_ySize; ++y)
+		{
+			double redValue = m_rChannel.at(x).at(y);
+			double greenValue = m_gChannel.at(x).at(y);
+			double blueValue = m_bChannel.at(x).at(y);
+
+			if (redValue > m_MaxRed)
+				m_MaxRed = redValue;
+
+			if (greenValue > m_MaxGreen)
+				m_MaxGreen = greenValue;
+
+			if (blueValue > m_MaxBlue)
+				m_MaxBlue = blueValue;
+
+			if (m_MaxRed > m_OverAllMax)
+				m_OverAllMax = m_MaxRed;
+
+			if (m_MaxGreen > m_OverAllMax)
+				m_OverAllMax = m_MaxGreen;
+
+			if (m_MaxBlue > m_OverAllMax)
+				m_OverAllMax = m_MaxBlue;
+		}
+	}
 }

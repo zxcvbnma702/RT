@@ -37,6 +37,7 @@ set(SOURCE_FILES
     src/lightBase.cpp
     src/pointLight.cpp
     src/gtfm.cpp
+    src/plane.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})

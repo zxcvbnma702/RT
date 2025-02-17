@@ -136,3 +136,22 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 
 有了变换就可以将球体的物理坐标转换为世界坐标，
 > 在3D图形学中，通常我们有一个物体的局部坐标系（例如球体的物理坐标），然后通过一系列变换（平移、旋转、缩放等），将该物体从局部坐标系转换到世界坐标系中。
+
+
+## 平面与Shadows
+
+![alt text](image-25.png)
+
+![alt text](image-26.png)
+
+![alt text](image-27.png)
+
+![alt text](image-28.png)
+
+![alt text](image-29.png)
+
+![alt text](image-30.png)
+
+![alt text](image-31.png)
+
+![alt text](image-32.png)

@@ -7,6 +7,7 @@
 #include "camera.hpp"
 #include "objectSphere.hpp"
 #include "pointLight.hpp"
+#include "plane.hpp"
 
 namespace RT
 {
