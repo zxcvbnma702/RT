@@ -21,7 +21,7 @@ link_libraries(SDL2-2.0.0)
 # link_libraries(SDL2)
 
 # library
-include_directories(${CMAKE_SOURCE_DIR}/qbRayTrace)
+include_directories(${CMAKE_SOURCE_DIR}/qbRayTrace/*)
 include_directories(${CMAKE_SOURCE_DIR}/qbRayTrace/qbLinAlg)
 link_directories(${SDL_LIB_DIR})
 
@@ -32,12 +32,14 @@ set(SOURCE_FILES
     qbRayTrace/scene.cpp
     qbRayTrace/ray.cpp
     qbRayTrace/camera.cpp
-    qbRayTrace/objectbase.cpp
-    qbRayTrace/objsphere.cpp
-    qbRayTrace/lightbase.cpp
-    qbRayTrace/pointlight.cpp
+    qbRayTrace/qbPrimatives/objectbase.cpp
+    qbRayTrace/qbPrimatives/objsphere.cpp
+    qbRayTrace/qbLights/lightbase.cpp
+    qbRayTrace/qbLights/pointlight.cpp
     qbRayTrace/gtfm.cpp
-    qbRayTrace/objplane.cpp
+    qbRayTrace/qbPrimatives/objplane.cpp
+    qbRayTrace/qbMaterials/materialbase.cpp
+    qbRayTrace/qbMaterials/simplematerial.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})

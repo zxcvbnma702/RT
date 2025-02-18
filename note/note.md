@@ -155,3 +155,106 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 ![alt text](image-31.png)
 
 ![alt text](image-32.png)
+
+### 阴影
+
+1. 初次光线投射（Primary Ray Casting）:
+首先，从相机位置发射初始光线。每条光线穿过屏幕上的一个像素，并与场景中的物体进行相交测试，找到最近的交点。这一步用来判断光线击中了什么物体。
+
+2. 阴影光线投射（Shadow Ray Casting）:
+当确定初始光线与某个物体相交后，需要计算该点是否处于阴影中。为此，从交点向场景中的每个光源发射阴影光线。
+
+3. 计算阴影光线: 从交点（Intersection Point）向光源发出一条光线（Shadow Ray）。
+检测遮挡物: 检查阴影光线在其路径上是否与其他物体相交。如果有物体阻挡了这条光线，则交点处于阴影之中，意味着该点不能直接受到光照。
+光照计算:
+
+> 如果阴影光线到达光源时没有遇到任何遮挡物，则该点直接受到光照，可以继续计算光照贡献（包括直接光照和反射光照）。
+如果阴影光线被遮挡，则认为该点处于阴影中，来自该光源的光不会对该点产生直接光照。
+
+## 材质
+
+![alt text](image-33.png)
+
+布林冯反射模型
+
+> 将光分为3个部分，分别是环境光照(ambient lighting)，漫反射光照(diffuse reflection，高光(specular highlights)
+
+![alt text](image-39.png)
+
+[games101](https://www.bilibili.com/video/BV1X7411F744/?p=7&vd_source=b3b87210888ec87be647603921054a36)
+
+- 觀測向量 v
+- 表面法線 n
+- 光照方向 l
+
+> 漫反射分量
+
+$$
+    L_d = K_d \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}})
+$$
+
+$L_d$（扩散反射光强度，Diffuse Light Intensity）：这是物体接收到并反射出的光线的强度，对于每个表面点来讲，它是通过漫反射计算出来的光线强度。
+
+$K_d$（漫反射係數嗎，Diffuse Reflectance Coefficient）：光到达物体表面后，能量会被吸收一部分（不同材质的物体对不同波长的光线吸收率是不一样的），剩下的会被反射出来，漫反射系数即定义了不被物体所吸收的光照颜色`
+diffuseColor`，即物体表现出的颜色。
+
+$\frac{E}{r^2}$(光照能量衰減係數)：光照能量衰减系数，抵达物体表面的能量与光源和着色点距离平方成反比。
+
+$\max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}})$：表面着色点接收到的能量正比于$\mathbf{\hat{n}} \cdot \mathbf{\hat{l}}$。为了避免负值情况使用max做了最小值的限定
+
+![alt text](image-40.png)
+
+![alt text](image-35.png)
+
+> 高光
+
+$$
+L_s = K_s \frac{E}{r^2} \max(0, \cos \theta)^p = K_s \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})^p
+$$
+
+$L_s$ ：镜面反射光强度 (Specular Light Intensity)。这是物体表面由于镜面反射作用反射的光强度。
+
+$K_s$ ：镜面反射系数 (Specular Reflectance Coefficient)。这是物体材质属性，表示物体表面对镜面反射光的反射能力。值越高，镜面反射效果越强。
+
+$E$ ：光源光强 (Light Intensity)。这是来自光源的光的强度。
+
+$r$ ：光源到表面点的距离 (Distance from Light Source to Surface Point)。光源与物体表面点之间的直线距离。公式中用 $r^2$ 是为了计算距离引起的光衰减。
+
+$\cos \theta$ ：光源方向与镜面反射方向之间的余弦值。这是光源方向和镜面反射方向向量之间夹角的余弦。对于镜面反射，镜面反射方向 (R) 通常是视角方向的反射。
+
+$\mathbf{\hat{n}} \cdot \mathbf{\hat{h}}$ ：单位表面法线向量 $\mathbf{\hat{n}}$ 与半程向量 $\mathbf{\hat{h}}$ 的点积。
+
+$\mathbf{\hat{n}}$：表面法线向量 (Normal Vector)。这是垂直于表面的单位向量，表示表面方向。
+$\mathbf{\hat{h}}$：半程向量 (Halfway Vector)。这是光源方向向量 $\mathbf{\hat{l}}$ 和观察方向向量 $\mathbf{\hat{v}}$ 的归一化和。公式为：
+$$
+\mathbf{\hat{h}} = \frac{\mathbf{\hat{l}} + \mathbf{\hat{v}}}{|\mathbf{\hat{l}} + \mathbf{\hat{v}}|}
+$$
+$p$ ：高光指数 (Shininess Coefficient)，也称为高光锐度指数或镜面反射指数 (Specular Exponent)。这个参数控制高光的锐利程度。值越大，镜面反射的高光区域越小越尖锐，值越小，高光区域越大越柔和。
+
+$\max(0, \cos \theta)$ 和 $\max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})$：这些函数确保了只有当光线方向与法线方向和半程向量方向成锐角时才有正的贡献，因为负值（光线在表面后方）不产生反射强度。
+
+![alt text](image-34.png)
+
+> 环境光
+
+布林冯模型假设环境光是一个常量
+
+$$
+ L_a = K_a E_a
+$$
+
+![alt text](image-36.png)
+
+> 总结
+
+将三种光照作用效果叠加在一起，就可以得到近似的物理光照效果
+
+$$
+I = I_{\text{ambient}} + I_{\text{diffuse}} + I_{\text{specular}} = K_a E_a + K_d \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}})  K_s \frac{E}{r^2} \max(0, \cos \theta)^p + K_s \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})^p
+$$
+
+反射
+
+![alt text](image-37.png)
+
+![alt text](image-38.png)

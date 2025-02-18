@@ -1,24 +1,24 @@
 /* ***********************************************************
 	objectbase.cpp
-	
+
 	The objectbase class implementation - A base class from which
 	all other object classes will inherit.
-	
+
 	This file forms part of the qbRayTrace project as described
 	in the series of videos on the QuantitativeBytes YouTube
 	channel.
-	
+
 	This code corresponds specifically to Episode 2 of the series,
 	which may be found here:
 	https://youtu.be/8fWZM8hCX5E
-	
-	The whole series may be found on the QuantitativeBytes 
+
+	The whole series may be found on the QuantitativeBytes
 	YouTube channel at:
 	www.youtube.com/c/QuantitativeBytes
-	
+
 	GPLv3 LICENSE
-	Copyright (c) 2021 Michael Bennett	
-	
+	Copyright (c) 2021 Michael Bennett
+
 ***********************************************************/
 
 // objectbase.cpp
@@ -31,13 +31,11 @@
 // Default constructor.
 qbRT::ObjectBase::ObjectBase()
 {
-
 }
 
 // The destructor.
 qbRT::ObjectBase::~ObjectBase()
 {
-
 }
 
 // Function to test for intersections.
@@ -54,5 +52,12 @@ void qbRT::ObjectBase::SetTransformMatrix(const qbRT::GTform &transformMatrix)
 // Function to test whether two floating-point numbers are close to being equal.
 bool qbRT::ObjectBase::CloseEnough(const double f1, const double f2)
 {
-	return fabs(f1-f2) < EPSILON;
+	return fabs(f1 - f2) < EPSILON;
+}
+
+bool qbRT::ObjectBase::AssignMaterial(const std::shared_ptr<qbRT::MaterialBase> &objectMaterial)
+{
+	m_pMaterial = objectMaterial;
+	m_hasMaterial = true;
+	return m_hasMaterial;
 }

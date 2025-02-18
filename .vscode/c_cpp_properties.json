@@ -6,7 +6,9 @@
                 "${workspaceFolder}/**",
                 "/Library/Vulkan/macOS/include/SDL2",
                 "${workspaceFolder}/qbRayTrace",
-                "${workspaceFolder}/qbRayTrace/qbLinAlg"
+                "${workspaceFolder}/qbRayTrace/qbLinAlg",
+                "${workspaceFolder}/qbRayTrace",
+                "${workspaceFolder}/qbRayTrace"
             ],
             "defines": [],
             "macFrameworkPath": [
