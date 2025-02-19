@@ -1,5 +1,5 @@
 /* ***********************************************************
-	gtfm.hpp
+	gtfm.cpp
 	
 	The GTform class definition - A class to handle geometric
 	transforms.
@@ -35,6 +35,12 @@ qbRT::GTform::GTform()
 qbRT::GTform::~GTform()
 {
 
+}
+
+// Construct from three vectors.
+qbRT::GTform::GTform(const qbVector<double> &translation, const qbVector<double> &rotation, const qbVector<double> &scale)
+{
+	SetTransform(translation, rotation, scale);
 }
 
 // Construct from a pair of matrices.
@@ -99,10 +105,10 @@ void qbRT::GTform::SetTransform(	const qbVector<double> &translation,
 	
 	// Combine to give the final forward transform matrix.
 	m_fwdtfm =	translationMatrix * 
-							scaleMatrix *
 							rotationMatrixX *
 							rotationMatrixY *
-							rotationMatrixZ;
+							rotationMatrixZ *
+							scaleMatrix;
 							
 	// Compute the backwards transform.
 	m_bcktfm = m_fwdtfm;

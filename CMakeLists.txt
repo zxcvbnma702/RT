@@ -38,6 +38,8 @@ set(SOURCE_FILES
     qbRayTrace/qbLights/pointlight.cpp
     qbRayTrace/gtfm.cpp
     qbRayTrace/qbPrimatives/objplane.cpp
+    qbRayTrace/qbPrimatives/cylinder.cpp
+    qbRayTrace/qbPrimatives/cone.cpp
     qbRayTrace/qbMaterials/materialbase.cpp
     qbRayTrace/qbMaterials/simplematerial.cpp
 )

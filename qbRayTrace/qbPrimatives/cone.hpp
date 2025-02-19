@@ -1,16 +1,16 @@
 /* ***********************************************************
-	objectsphere.hpp
+	cone.hpp
 	
-	The objectsphere class definition - A class to implement
-	spheres. Inherits from objectbase.hpp
+	The cone class definition - A class for creating cone 
+	primitive shapes.
 	
 	This file forms part of the qbRayTrace project as described
 	in the series of videos on the QuantitativeBytes YouTube
 	channel.
 	
-	This code corresponds specifically to Episode 2 of the series,
+	This code corresponds specifically to Episode 6 of the series,
 	which may be found here:
-	https://youtu.be/8fWZM8hCX5E
+	https://youtu.be/UTz7ytMJ2yk
 	
 	The whole series may be found on the QuantitativeBytes 
 	YouTube channel at:
@@ -21,32 +21,26 @@
 	
 ***********************************************************/
 
-// objsphere.hpp
-
-#ifndef OBJSPHERE_H
-#define OBJSPHERE_H
+#ifndef CONE_H
+#define CONE_H
 
 #include "objectbase.hpp"
 #include "../gtfm.hpp"
 
 namespace qbRT
 {
-	class ObjSphere : public ObjectBase
+	class Cone : public ObjectBase
 	{
 		public:
-			/* The default constructor.
-				Note that this will define a unit sphere at the origin. */
-			ObjSphere();
+			// Default constructor.
+			Cone();
 			
 			// Override the destructor.
-			virtual ~ObjSphere() override;
+			virtual ~Cone() override;
 			
 			// Override the function to test for intersections.
-			virtual bool TestIntersection(const qbRT::Ray &castRay, qbVector<double> &intPoint, qbVector<double> &localNormal, qbVector<double> &localColor) override;
-			
-		private:
-		
-		
+			virtual bool TestIntersection(	const qbRT::Ray &castRay, qbVector<double> &intPoint,
+																			qbVector<double> &localNormal, qbVector<double> &localColor) override;			
 	};
 }
 

@@ -1,5 +1,5 @@
 /* ***********************************************************
-	gtfm.cpp
+	gtfm.hpp
 	
 	The GTform class implementation - A class to handle geometric
 	transforms.
@@ -17,7 +17,7 @@
 	www.youtube.com/c/QuantitativeBytes
 	
 	GPLv3 LICENSE
-	Copyright (c) 2021 Michael Bennett
+	Copyright (c) 2021 Michael Bennett	
 	
 ***********************************************************/
 
@@ -40,6 +40,9 @@ namespace qbRT
 			// Constructor & destructor.
 			GTform();
 			~GTform();
+			
+			// Construct from three vectors.
+			GTform(const qbVector<double> &translation, const qbVector<double> &rotation, const qbVector<double> &scale);
 			
 			// Construct from a pair of matrices.
 			GTform(const qbMatrix2<double> &fwd, const qbMatrix2<double> &bck);

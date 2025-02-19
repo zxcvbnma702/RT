@@ -92,19 +92,19 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 
 ![alt text](image-9.png)
 
-## 几何变换
+## GETR
 
 ![alt text](image-10.png)
 
-单位矩阵
+> 单位矩阵
 
 ![alt text](image-11.png)
 
-缩放变换
+> 缩放变换
 
 ![alt text](image-13.png)
 
-旋转变换
+> 旋转变换
 
 ![alt text](image-12.png)
 
@@ -118,7 +118,7 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 
 ![alt text](image-18.png)
 
-平移变换
+> 平移变换
 
 ![alt text](image-19.png)
 
@@ -138,7 +138,7 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 > 在3D图形学中，通常我们有一个物体的局部坐标系（例如球体的物理坐标），然后通过一系列变换（平移、旋转、缩放等），将该物体从局部坐标系转换到世界坐标系中。
 
 
-## 平面与Shadows
+## Plane & Shadows
 
 ![alt text](image-25.png)
 
@@ -156,7 +156,7 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 
 ![alt text](image-32.png)
 
-### 阴影
+### shadow
 
 1. 初次光线投射（Primary Ray Casting）:
 首先，从相机位置发射初始光线。每条光线穿过屏幕上的一个像素，并与场景中的物体进行相交测试，找到最近的交点。这一步用来判断光线击中了什么物体。
@@ -171,7 +171,7 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 > 如果阴影光线到达光源时没有遇到任何遮挡物，则该点直接受到光照，可以继续计算光照贡献（包括直接光照和反射光照）。
 如果阴影光线被遮挡，则认为该点处于阴影中，来自该光源的光不会对该点产生直接光照。
 
-## 材质
+## Material
 
 ![alt text](image-33.png)
 
@@ -253,8 +253,81 @@ $$
 I = I_{\text{ambient}} + I_{\text{diffuse}} + I_{\text{specular}} = K_a E_a + K_d \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}})  K_s \frac{E}{r^2} \max(0, \cos \theta)^p + K_s \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})^p
 $$
 
-反射
+> 反射
+
+$$
+\mathbf{R} = \mathbf{V} - 2 (\mathbf{V} \cdot \mathbf{N}) \mathbf{N}
+$$
+
+$\mathbf{V}$ 是入射光线的方向向量，应该是一个单位向量。
+$\mathbf{N}$ 是反射面的法线向量，也是一个单位向量，通常指向介质外部。
+$\mathbf{V} \cdot \mathbf{N}$ 表示向量的点积运算。
+$\mathbf{R}$ 是反射光线的方向向量，也是一个单位向量。
 
 ![alt text](image-37.png)
 
 ![alt text](image-38.png)
+
+## Cone and Cylinder
+
+![alt text](image-41.png)
+
+![alt text](image-42.png)
+
+![alt text](image-43.png)
+
+![alt text](image-44.png)
+
+![alt text](image-45.png)
+
+![alt text](image-46.png)
+
+得到交点方程
+
+$$
+(p_x + t v_x)^2 + (p_y + t v_y)^2 = r^2
+$$
+
+展开公式
+
+$$
+t^2 v_x^2 + 2 p_x v_x t + p_x^2 + t^2 v_y^2 + 2 p_y v_y t + p_y^2 = r^2
+$$
+
+合并同类项
+
+$$
+t^2 v_x^2 + t^2 v_y^2 + 2 p_x v_x t + 2 p_y v_y t + p_x^2 + p_y^2 = r^2
+$$
+
+提出参数
+
+$$
+t^2 (v_x^2 + v_y^2) + 2t (p_x v_x + p_y v_y) + (p_x^2 + p_y^2) = r^2
+$$
+
+根据 
+
+$$
+at^2 + bt + c = 0
+$$
+
+推导出
+
+$$ a = v_x^2 + v_y^2 $$ $$ b = 2(p_xv_x + p_yv_y) $$ $$c=p_x^2 + p_y^2 -r^2 $$
+
+根据求根公式
+
+$$ t = \frac{-B \pm \sqrt{B^2 - 4AC}}{2A} $$
+
+![alt text](image-47.png)
+
+![alt text](image-48.png)
+
+![alt text](image-49.png)
+
+![alt text](image-50.png)
+
+![alt text](image-51.png)
+
+![alt text](image-52.png)

@@ -32,11 +32,11 @@
 #include <SDL.h>
 #include "qbImage.hpp"
 #include "camera.hpp"
-#include "qbPrimatives/objsphere.hpp"
-#include "qbPrimatives/objplane.hpp"
-#include "qbLights/pointlight.hpp"
-#include "qbMaterials/materialbase.hpp"
-#include "qbMaterials/simplematerial.hpp"
+#include "./qbPrimatives/objsphere.hpp"
+#include "./qbPrimatives/objplane.hpp"
+#include "./qbPrimatives/cylinder.hpp"
+#include "./qbPrimatives/cone.hpp"
+#include "./qbLights/pointlight.hpp"
 
 namespace qbRT
 {
