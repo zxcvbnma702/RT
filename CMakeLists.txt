@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5.0)
 project(RT VERSION 0.1.0 LANGUAGES C CXX)
 
 set(MY_LIBRARY_DIR /Library/Vulkan/macOS)
+set(SDL_IMAGE /opt/homebrew/Cellar/sdl2_image/2.8.5)
 # set(MY_LIBRARY_DIR C:/VulkanSDK/1.3.296.0)
 
 # 设置C++ 17标准
@@ -14,10 +15,17 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(SDL_INCLUDE_DIR ${MY_LIBRARY_DIR}/include/SDL2)
 set(SDL_INCLUDE_LIB ${MY_LIBRARY_DIR}/lib)
 
+set(SDL_IMAGE_INCLUDE_DIR ${SDL_IMAGE}/include/SDL2)
+set(SDL_IMAGE_INCLUDE_LIB ${SDL_IMAGE}/lib)
+
+include_directories(${SDL_IMAGE_INCLUDE_DIR})
+link_directories(${SDL_IMAGE_INCLUDE_LIB})
+
 include_directories(${SDL_INCLUDE_DIR})
 link_directories(${SDL_INCLUDE_LIB})
 
 link_libraries(SDL2-2.0.0)
+link_libraries(SDL2_image-2.0.0)
 # link_libraries(SDL2)
 
 # library
@@ -45,10 +53,12 @@ set(SOURCE_FILES
     qbRayTrace/qbTextures/texturebase.cpp
     qbRayTrace/qbTextures/flat.cpp
     qbRayTrace/qbTextures/checker.cpp
+    qbRayTrace/qbTextures/image.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})
 
 set_target_properties(RT PROPERTIES
     INSTALL_RPATH ${MY_LIBRARY_DIR}/lib
+    INSTALL_RPATH ${SDL_IMAGE_INCLUDE_LIB}
 )

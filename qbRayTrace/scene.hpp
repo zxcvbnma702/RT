@@ -39,6 +39,7 @@
 #include "./qbLights/pointlight.hpp"
 #include "./qbTextures/flat.hpp"
 #include "./qbTextures/checker.hpp"
+#include "./qbTextures/image.hpp"
 
 namespace qbRT
 {

@@ -414,5 +414,24 @@ $$
 
 ![alt text](image-67.png)
 
+### 图片 load
+
+使用 sdl_image 库，将图片像素由 uv 转化为 xy 范围
+
+> 统一调整范围
+
+u 和 v 的范围在 [-1, 1] 之间，我们需要将其调整到 [0, 1] 范围内。因此采取以下步骤：
+
+$$ u' = \frac{u + 1}{2} $$
+$$ v' = \frac{v + 1}{2} $$
+
+> 转换为像素坐标
+
+将调整后的范围 [0, 1] 转换为图像宽度和高度范围 [0, m_xSize] 和 [0, m_ySize]。
+
+$$ x = \left\lfloor u' \times m_xSize \right\rfloor $$
+$$ y = \left\lfloor v' \times m_ySize \right\rfloor $$
+
+![alt text](image-68.png)
 
 [referenceLink2]: https://zhuanlan.zhihu.com/p/594429859
