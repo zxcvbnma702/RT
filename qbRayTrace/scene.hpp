@@ -37,6 +37,8 @@
 #include "./qbPrimatives/cylinder.hpp"
 #include "./qbPrimatives/cone.hpp"
 #include "./qbLights/pointlight.hpp"
+#include "./qbTextures/flat.hpp"
+#include "./qbTextures/checker.hpp"
 
 namespace qbRT
 {

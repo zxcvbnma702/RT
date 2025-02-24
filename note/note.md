@@ -4,7 +4,7 @@
 
 ## Use SDL2 to create windows and write something on the surface.
 
-## Camera
+## Camera （摄像机）
 
 ![alt text](image.png)
 
@@ -76,7 +76,7 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 // 方向为从摄像机位置 (0, 0, 0) 指向图像平面上的坐标 (1, 1, -1) 的向量。
 ```
 
-## Ray - Sphere Intersections
+## Ray - Sphere Intersections（光线-球体🍌）
 
 ![alt text](image-5.png)
 
@@ -86,7 +86,7 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 
 ![alt text](image-7.png)
 
-## Point Light
+## Point Light （点光源）
 
 ![alt text](image-8.png)
 
@@ -138,7 +138,7 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 > 在3D图形学中，通常我们有一个物体的局部坐标系（例如球体的物理坐标），然后通过一系列变换（平移、旋转、缩放等），将该物体从局部坐标系转换到世界坐标系中。
 
 
-## Plane & Shadows
+## Plane & Shadows （平面与阴影）
 
 ![alt text](image-25.png)
 
@@ -171,7 +171,7 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 > 如果阴影光线到达光源时没有遇到任何遮挡物，则该点直接受到光照，可以继续计算光照贡献（包括直接光照和反射光照）。
 如果阴影光线被遮挡，则认为该点处于阴影中，来自该光源的光不会对该点产生直接光照。
 
-## Material
+## Material（布林冯模型）
 
 ![alt text](image-33.png)
 
@@ -250,7 +250,7 @@ $$
 将三种光照作用效果叠加在一起，就可以得到近似的物理光照效果
 
 $$
-I = I_{\text{ambient}} + I_{\text{diffuse}} + I_{\text{specular}} = K_a E_a + K_d \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}})  K_s \frac{E}{r^2} \max(0, \cos \theta)^p + K_s \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})^p
+I \\ = I_{\text{ambient}} + I_{\text{diffuse}} + I_{\text{specular}} \\ = K_a E_a + K_d \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}}) + K_s \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})^p
 $$
 
 > 反射
@@ -331,3 +331,88 @@ $$ t = \frac{-B \pm \sqrt{B^2 - 4AC}}{2A} $$
 ![alt text](image-51.png)
 
 ![alt text](image-52.png)
+
+## UV Space & Textures (uv展开 & 纹理)
+
+> UV Unwrapping 是将 3D 模型的表面展开成一个平坦的二维表示，使得每一个3D表面都能准确地对应到2D纹理图像上的特定部分。
+>
+> 笛卡尔坐标系 -> 柱面坐标系
+>
+> [referece](https://zhuanlan.zhihu.com/p/369977849)
+
+![alt text](image-54.png)
+
+![alt text](image-53.png)
+
+![alt text](image-55.png)
+
+![alt text](image-56.png)
+
+![alt text](image-57.png)
+
+![alt text](image-58.png)
+
+![alt text](image-59.png)
+
+![alt text](image-60.png)
+
+> 球面映射
+>   
+> [reference][referenceLink2]
+
+因为我们假定半径r为1，那么对于球面坐标系而言表示一个方向只需要两个变量，一个变量是极角 $\theta$ 相当于纬度，另一个是方位角 $\varphi$ 相当于经度，这两个变量的作用域分别是 $0 ≤θ≤ π$ 和 $ 0 ≤φ< 2π $，我们需要将其映射到uv坐标系的 $（0,1)$ 范围内。
+
+![alt text](image-61.png)
+
+1. 对于已知点 $(x, y, z)$ , 将其转换为球坐标系 $(r,θ,ϕ)$。
+$$
+\begin{cases}
+r = \sqrt{x^2 + y^2 + z^2} \\
+\theta = \arccos \left( \frac{z}{r} \right)  = \arcsin\left(\frac{\sqrt{x^2 + y^2}}{r}\right) = \arctan\left(\frac{\sqrt{x^2 + y^2}}{z}\right) \\
+\varphi = \arccos\left(\frac{x}{r \sin \theta}\right) = \arcsin\left(\frac{y}{r \sin \theta}\right) = \arctan\left(\frac{y}{x}\right)
+\end{cases}
+$$
+
+1. 参数化修正
+
+实际应用中，UV坐标通常需要归一化到[0, 1]或[-1, 1]，因此：
+
+$$
+\begin{cases}
+u = \frac{\varphi}{2\pi} = \frac{1}{2\pi} \arctan \left( \frac{y}{x} \right) \\
+v = \frac{\theta}{\pi} = \frac{1}{\pi} \arccos \left( \frac{z}{r} \right)
+\end{cases}
+$$
+
+3. 公式等价变形
+
+等价变形后的公式为
+
+$$
+\begin{cases}
+u = \arctan \left( \frac{\sqrt{x^2 + y^2}}{z} \right) \\
+v = \arctan \left( \frac{y}{x} \right)
+\end{cases}
+$$
+
+4. 归一化处理
+
+$$
+\begin{cases}
+u_{\text{norm}} = 2 \cdot \dfrac{u}{\pi} - 1 \\
+v_{\text{norm}} = 2 \cdot \dfrac{v}{\pi} - 1
+\end{cases}
+$$
+
+![alt text](image-63.png)
+
+![alt text](image-64.png)
+
+![alt text](image-65.png)
+
+![alt text](image-66.png)
+
+![alt text](image-67.png)
+
+
+[referenceLink2]: https://zhuanlan.zhihu.com/p/594429859

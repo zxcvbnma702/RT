@@ -42,6 +42,9 @@ set(SOURCE_FILES
     qbRayTrace/qbPrimatives/cone.cpp
     qbRayTrace/qbMaterials/materialbase.cpp
     qbRayTrace/qbMaterials/simplematerial.cpp
+    qbRayTrace/qbTextures/texturebase.cpp
+    qbRayTrace/qbTextures/flat.cpp
+    qbRayTrace/qbTextures/checker.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})

@@ -165,6 +165,16 @@ bool qbRT::Cone::TestIntersection(const qbRT::Ray &castRay, qbVector<double> &in
 		// Return the base color.
 		localColor = m_baseColor;
 
+		// Compute the (u,v) and store for possible later
+		double x = validPOI.GetElement(0);
+		double y = validPOI.GetElement(1);
+		double z = validPOI.GetElement(2);
+		double u = atan2(y, x) / M_PI;
+		double v = 2.0 * z + 1.0;
+
+		m_uvCoords.SetElement(0, u);
+		m_uvCoords.SetElement(1, v);
+
 		return true;
 	}
 	else
@@ -187,6 +197,14 @@ bool qbRT::Cone::TestIntersection(const qbRT::Ray &castRay, qbVector<double> &in
 
 				// Return the base color.
 				localColor = m_baseColor;
+
+				// Compute the (u,v) and store for possible later
+				double x = validPOI.GetElement(0);
+				double y = validPOI.GetElement(1);
+				double z = validPOI.GetElement(2);
+
+				m_uvCoords.SetElement(0, x);
+				m_uvCoords.SetElement(1, y);
 
 				return true;
 			}

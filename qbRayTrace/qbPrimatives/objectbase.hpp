@@ -69,6 +69,9 @@ namespace qbRT
 
 		// A flag to indicate whether this object has a material or not.
 		bool m_hasMaterial = false;
+
+		// Store the (u,v) coordinates from a detected intersection
+		qbVector<double> m_uvCoords{2};
 	};
 }
 

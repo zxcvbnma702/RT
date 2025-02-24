@@ -22,8 +22,11 @@ qbVector<double> qbRT::SimpleMaterial::ComputeColor(const std::vector<std::share
 	qbVector<double> spcColor{3};
 
 	// Compute the diffuse component.
-	difColor = ComputeDiffuseColor(objectList, lightList, currentObject, intPoint, localNormal, m_baseColor);
-
+	if (!m_hasTexture)
+		difColor = ComputeDiffuseColor(objectList, lightList, currentObject, intPoint, localNormal, m_baseColor);
+	else
+		difColor = ComputeDiffuseColor(objectList, lightList, currentObject, intPoint, localNormal, m_textureList.at(0)->GetColor(currentObject->m_uvCoords));
+		
 	// Compute the reflection component.
 	if (m_reflectivity > 0.0)
 		refColor = ComputeReflectionColor(objectList, lightList, currentObject, intPoint, localNormal, cameraRay);
