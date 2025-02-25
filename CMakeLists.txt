@@ -48,6 +48,7 @@ set(SOURCE_FILES
     qbRayTrace/qbPrimatives/objplane.cpp
     qbRayTrace/qbPrimatives/cylinder.cpp
     qbRayTrace/qbPrimatives/cone.cpp
+    qbRayTrace/qbPrimatives/box.cpp
     qbRayTrace/qbMaterials/materialbase.cpp
     qbRayTrace/qbMaterials/simplematerial.cpp
     qbRayTrace/qbTextures/texturebase.cpp

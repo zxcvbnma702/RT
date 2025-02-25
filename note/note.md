@@ -389,6 +389,30 @@ $$ t = \frac{-B \pm \sqrt{B^2 - 4AC}}{2A} $$
 
 ![alt text](image-52.png)
 
+## box(盒子)
+
+![alt text](image-73.png)
+
+![alt text](image-74.png)
+
+![alt text](image-75.png)
+
+![alt text](image-76.png)
+
+![alt text](image-77.png)
+
+![alt text](image-78.png)
+
+![alt text](image-79.png)
+
+![alt text](image-80.png)
+
+![alt text](image-81.png)
+
+![alt text](image-82.png)
+
+![alt text](image-84.png)
+
 ## UV Space & Textures (uv展开 & 纹理)
 
 > UV Unwrapping 是将 3D 模型的表面展开成一个平坦的二维表示，使得每一个3D表面都能准确地对应到2D纹理图像上的特定部分。
@@ -577,5 +601,10 @@ $$
 
 这就是斯涅尔定律的矢量形式的推导过程。
 
-
 ![alt text](image-72.png)
+
+![alt text](image-85.png)
+
+## Ray Marching
+
+![alt text](image-83.png)

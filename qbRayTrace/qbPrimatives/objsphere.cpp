@@ -39,6 +39,10 @@ qbRT::ObjSphere::~ObjSphere()
 // Function to test for intersections.
 bool qbRT::ObjSphere::TestIntersection(const qbRT::Ray &castRay, qbVector<double> &intPoint, qbVector<double> &localNormal, qbVector<double> &localColor)
 {
+	if(!m_isVisible){
+        return false;
+    }
+	
 	// Copy the ray and apply the backwards transform.
 	qbRT::Ray bckRay = m_transformMatrix.Apply(castRay, qbRT::BCKTFORM);
 

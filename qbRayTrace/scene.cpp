@@ -72,6 +72,7 @@ qbRT::Scene::Scene()
 	auto sphereMaterial = std::make_shared<qbRT::SimpleMaterial>(qbRT::SimpleMaterial());
 	auto sphereMaterial2 = std::make_shared<qbRT::SimpleMaterial>(qbRT::SimpleMaterial());
 	auto sphereMaterial3 = std::make_shared<qbRT::SimpleMaterial>(qbRT::SimpleMaterial());
+	auto coneMaterial = std::make_shared<qbRT::SimpleMaterial>(qbRT::SimpleMaterial());
 	auto glassMaterial = std::make_shared<qbRT::SimpleRefractive>(qbRT::SimpleRefractive());
 
 	// **************************************************************************************
@@ -99,6 +100,10 @@ qbRT::Scene::Scene()
 	sphereMaterial3->m_reflectivity = 0.8;
 	sphereMaterial3->m_shininess = 32.0;
 
+	coneMaterial->m_baseColor = qbVector<double>{std::vector<double>{0.8, 0.8, 0.2}};
+	coneMaterial->m_reflectivity = 0.15;
+	coneMaterial->m_shininess = 32.0;
+
 	glassMaterial->m_baseColor = qbVector<double>{std::vector<double>{1.0, 1.0, 1.0}};
 	glassMaterial->m_reflectivity = 0.25;
 	glassMaterial->m_shininess = 32.0;
@@ -116,7 +121,7 @@ qbRT::Scene::Scene()
 
 	// **************************************************************************************
 	auto imagePlane = std::make_shared<qbRT::ObjPlane>(qbRT::ObjPlane());
-	imagePlane->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{0.0, 5.0, -0.75}},
+	imagePlane->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{2.0, 5.0, -0.75}},
 												qbVector<double>{std::vector<double>{-M_PI / 2.0, 0.0, 0.0}},
 												qbVector<double>{std::vector<double>{1.75, 1.75, 1.0}}});
 	imagePlane->AssignMaterial(imageMaterial);
@@ -143,11 +148,17 @@ qbRT::Scene::Scene()
 	sphere3->AssignMaterial(sphereMaterial3);
 
 	// **************************************************************************************
-	auto sphere4 = std::make_shared<qbRT::Cylinder>(qbRT::Cylinder());
-	sphere4->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{2.0, -1.25, 0.25}},
+	auto cylinder = std::make_shared<qbRT::Cylinder>(qbRT::Cylinder());
+	cylinder->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{2.0, -1.25, 0.25}},
 											 qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
 											 qbVector<double>{std::vector<double>{0.75, 0.75, 0.75}}});
-	sphere4->AssignMaterial(glassMaterial);
+	cylinder->AssignMaterial(glassMaterial);
+
+	auto box = std::make_shared<qbRT::Box>(qbRT::Box());
+	box->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
+										qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
+										qbVector<double>{std::vector<double>{0.5, 2.0, 1.0}}});
+	box->AssignMaterial(coneMaterial);
 
 	// **************************************************************************************
 	// Put the objects into the scene.
@@ -157,7 +168,8 @@ qbRT::Scene::Scene()
 	m_objectList.push_back(sphere);
 	m_objectList.push_back(sphere2);
 	m_objectList.push_back(sphere3);
-	m_objectList.push_back(sphere4);
+	m_objectList.push_back(box);
+	m_objectList.push_back(cylinder);
 
 	// **************************************************************************************
 	// Construct and setup the lights.

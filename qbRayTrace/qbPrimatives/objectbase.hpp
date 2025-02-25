@@ -70,6 +70,9 @@ namespace qbRT
 		// A flag to indicate whether this object has a material or not.
 		bool m_hasMaterial = false;
 
+		// A flag to indicate whether this object is visible.
+		bool m_isVisible = true;
+
 		// Store the (u,v) coordinates from a detected intersection
 		qbVector<double> m_uvCoords{2};
 	};

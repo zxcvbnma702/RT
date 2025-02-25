@@ -36,6 +36,7 @@
 #include "./qbPrimatives/objplane.hpp"
 #include "./qbPrimatives/cylinder.hpp"
 #include "./qbPrimatives/cone.hpp"
+#include "./qbPrimatives/box.hpp"
 #include "./qbLights/pointlight.hpp"
 #include "./qbTextures/flat.hpp"
 #include "./qbTextures/checker.hpp"
