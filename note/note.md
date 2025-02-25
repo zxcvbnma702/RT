@@ -2,7 +2,22 @@
 
 ## What is RayTracing
 
-## Use SDL2 to create windows and write something on the surface.
+> 光线追踪（Ray Tracing）是一种图形渲染技术，用于生成高度逼真的图像。光线追踪模拟光线在场景中的传播和交互，以实现逼真的光照效果、阴影、反射、折射和全局光照。
+>
+> 光线追踪基于光的物理行为，通过追踪从视点出发的光线，与场景中的物体交互来模拟视觉效果
+
+
+光线追踪算法是一种非常自然的技术，相比于光栅化的方法，它更加简单、暴力、真实。与光栅化根据物体计算所在的像素的方式不同，光线路径追踪的方法是一个相反的过程，它在于用眼睛去看世界而不是世界如何到达眼中。如下图所示，从视点出发向屏幕上每一个像素发出一条光线View Ray，追踪此光路并计算其逆向光线的方向，映射到对应的像素上。通过计算光路上颜色衰减和叠加，即可基本确定每一个像素的颜色。
+
+![alt text](image-71.png)
+
+[reference](www.youtube.com/c/QuantitativeBytes)
+
+## 窗口
+
+使用 SDL2 创建窗口
+
+> SDL（Simple DirectMedia Layer）是一个跨平台的多媒体开发库，用于访问低级硬件（如图形、声音和输入设备）。
 
 ## Camera （摄像机）
 
@@ -12,7 +27,49 @@
 
 ![alt text](image-2.png)
 
+**摄像机位置（Camera Position）**：摄像机在世界坐标系中的位置，记为 $\mathbf{Corg}$。
+**看向的位置（Look At Position）**：摄像机所望向的点，记为 $\mathbf{LookAt}$。
+**上方向向量（Up Vector）**：定义摄像机的上方向，记为 $\mathbf{Up}$。
+**焦距（Focal Length）**：从摄像机到投影平面的距离，记为 $f$。
+**投影平面的尺寸**：水平尺寸 $W$ 和垂直尺寸 $H$。
+**宽高比（Aspect Ratio）**：投影平面宽度与高度的比值，记为 $\text{AR}$。
+例如，宽高比为 16:9，则 $\text{AR} = 16/9$。
+
 ![alt text](image-3.png)
+
+> 向量计算
+> 
+1. **对齐向量（Forward Vector）**：从摄像机位置指向看向点的单位向量，表示摄像机的朝向。
+$$
+\mathbf{F} = \frac{\mathbf{LookAt} - \mathbf{Corg}}{|\mathbf{LookAt} - \mathbf{Corg}|}
+$$
+
+2. **水平向量（Right Vector）**：摄像机水平方向，由对齐向量和上方向向量的叉积得到。
+$$
+\mathbf{U} = \frac{\mathbf{F} \times \mathbf{Up}}{|\mathbf{F} \times \mathbf{Up}|}
+$$
+
+3. **直向量（Up Vector）**：由水平向量和对齐向量的叉积得到，重新计算后的上方向向量。
+$$
+\mathbf{V} = \mathbf{U} \times \mathbf{F}
+$$
+
+> 平面计算
+
+1. **投影平面中心点**：从摄像机位置沿对齐向量方向前进焦距的点，表示投影平面的中心。
+$$
+\mathbf{P}_\text{center} = \mathbf{Corg} + f \mathbf{F}
+$$
+
+2. **投影平面的尺寸调整**：
+$$
+\mathbf{U}_\text{plane} = \mathbf{U} \times W
+$$
+$$
+\mathbf{V}_\text{plane} = \mathbf{V} \times H
+$$
+
+todo 画图
 
 > 图像平面（Image Plane）是指在计算机图形学和计算机视觉领域中，虚拟摄像机在空间中生成图像的那个平面。它是场景中从三维到二维投影的平面，简单来说，就是摄像机所“看到”的东西最终映射到这个平面上形成的图像。
 
@@ -435,3 +492,90 @@ $$ y = \left\lfloor v' \times m_ySize \right\rfloor $$
 ![alt text](image-68.png)
 
 [referenceLink2]: https://zhuanlan.zhihu.com/p/594429859
+
+## Refractive Materials（折射材料）
+
+> 折射材料（Refractive Materials）用来模拟现实世界中透明或半透明材料对光的折射行为。这类材料可以真实地再现如玻璃、水、宝石等在光线经过时产生的物理效果，使得渲染的图像更加逼真。
+>
+> 当光线从一种介质进入另一种介质时，光线的方向改变。这个变化可以用斯涅尔定律（Snell's Law）来描述。
+
+斯涅尔定律：$$n_1 \sin \theta_1 = n_2 \sin \theta_2$$
+
+![alt text](image-69.png)
+
+![alt text](image-70.png)
+
+1. 斯涅尔定律的基本形式
+斯涅尔定律在标量形式下表示为：
+$$
+n_1 \sin \theta_1 = n_2 \sin \theta_2
+$$
+其中，$n_1$ 和 $n_2$ 是两种介质的折射率，$\theta_1$ 是入射角，$ \theta_2$ 是折射角。
+
+1. 矢量的定义
+设入射方向的单位矢量为 $\vec{v_{incident}}$，折射方向的单位矢量为 $\vec{v_{refract}}$，法向量为 $\vec{n}$。
+
+1. 使用法向量表示入射和折射角的余弦
+我们有以下关系：
+$$
+\cos \theta_1 = - \vec{n} \cdot \vec{v_{incident}}
+$$
+$$
+\cos \theta_2 = - \vec{n} \cdot \vec{v_{refract}}
+$$
+
+1. 矢量形式的几何关系
+将入射矢量分解为平行法向量和垂直法向量的部分:
+$$
+\vec{v_{incident}} = \vec{v}{\parallel} + \vec{v}{\perp}
+$$
+这里，$\vec{v}{\parallel}$ 是平行于法向量的部分，$\vec{v}{\perp}$ 是垂直于法向量的部分:
+$$
+\vec{v}{\parallel} = -(\vec{n} \cdot \vec{v_{incident}}) \vec{n} = -\cos \theta_1 \vec{n}
+$$
+$$
+\vec{v}{\perp} = \vec{v_{incident}} - \vec{v}{\parallel} = \vec{v_{incident}} + \cos \theta_1 \vec{n}
+$$
+
+对于折射矢量，我们有类似的分解:
+$$
+\vec{v_{refract}} = \vec{v}'{\parallel} + \vec{v}'_{\perp}
+$$
+
+5. 利用斯涅尔定律和几何关系
+根据斯涅尔定律：
+$$
+n_1 \sin \theta_1 = n_2 \sin \theta_2 \quad \Rightarrow \quad \sin \theta_2 = \frac{n_1}{n_2} \sin \theta_1
+$$
+
+垂直于法线的分量不变：
+$$
+\vec{v}'{\perp} = \frac{n_1}{n_2} \vec{v}{\perp}
+$$
+
+平行于法线的分量通过折射角的余弦变化：
+$$
+\cos \theta_2 = \sqrt{1 - \left( \frac{n_1}{n_2} \sin \theta_1 \right)^2}
+$$
+
+6. 总的折射矢量表示
+折射矢量的总形式：
+$$
+\vec{v_{refract}} = \frac{n_1}{n_2} (\vec{v_{incident}} + \cos \theta_1 \vec{n}) - \cos \theta_2 \vec{n}
+$$
+
+将上面的分解代入并整理得到：
+$$
+\vec{v_{refract}} = \left( \frac{n_1}{n_2} \right) \vec{v_{incident}} + \left( \left( \frac{n_1}{n_2} \cos \theta_1 \right) - \cos \theta_2 \right) \vec{n}
+$$
+
+最终表达式
+使用 $r = \frac{n_1}{n_2}$ 和 $c = \cos \theta_1 = - \vec{n} \cdot \vec{v_{incident}} $，并结合我们对 $\cos \theta_2$ 的计算：
+$$
+\vec{v_{refract}} = r \vec{v_{incident}} + \left( r c - \sqrt{1 - r^2(1 - c^2)} \right) \vec{n}
+$$
+
+这就是斯涅尔定律的矢量形式的推导过程。
+
+
+![alt text](image-72.png)

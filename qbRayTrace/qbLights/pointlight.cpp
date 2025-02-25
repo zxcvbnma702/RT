@@ -74,6 +74,7 @@ bool qbRT::PointLight::ComputeIllumination(const qbVector<double> &intPoint, con
 			validInt = sceneObject->TestIntersection(lightRay, poi, poiNormal, poiColor);
 			if (validInt)
 			{
+				// Check if the intersection point is further away than the light source.
 				double dist = (poi - startPoint).norm();
 				if (dist > lightDist)
 					validInt = false;

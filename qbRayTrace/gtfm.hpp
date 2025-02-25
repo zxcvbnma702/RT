@@ -59,6 +59,9 @@ namespace qbRT
 		// Function to apply the transform.
 		qbRT::Ray Apply(const qbRT::Ray &inputRay, bool dirFlag);
 		qbVector<double> Apply(const qbVector<double> &inputVector, bool dirFlag);
+		qbVector<double> ApplyNorm(const qbVector<double> &inputVector);
+
+		qbMatrix2<double> GetNormalTransform();
 
 		// Overload operators.
 		friend GTform operator*(const qbRT::GTform &lhs, const qbRT::GTform &rhs);
@@ -74,10 +77,12 @@ namespace qbRT
 
 	private:
 		void Print(const qbMatrix2<double> &matrix);
+		void ExtractLinearTransform();
 
 	private:
 		qbMatrix2<double> m_fwdtfm{4, 4};
 		qbMatrix2<double> m_bcktfm{4, 4};
+		qbMatrix2<double> m_lintfm{3, 3};
 	};
 }
 

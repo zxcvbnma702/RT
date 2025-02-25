@@ -54,6 +54,7 @@ set(SOURCE_FILES
     qbRayTrace/qbTextures/flat.cpp
     qbRayTrace/qbTextures/checker.cpp
     qbRayTrace/qbTextures/image.cpp
+    qbRayTrace/qbMaterials/simplerefractive.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})

@@ -73,10 +73,12 @@ bool qbRT::ObjPlane::TestIntersection(const qbRT::Ray &castRay, qbVector<double>
 				intPoint = m_transformMatrix.Apply(poi, qbRT::FWDTFORM);
 
 				// Compute the local normal.
-				qbVector<double> localOrigin{std::vector<double>{0.0, 0.0, 0.0}};
+				// qbVector<double> localOrigin{std::vector<double>{0.0, 0.0, 0.0}};
 				qbVector<double> normalVector{std::vector<double>{0.0, 0.0, -1.0}};
-				qbVector<double> globalOrigin = m_transformMatrix.Apply(localOrigin, qbRT::FWDTFORM);
-				localNormal = m_transformMatrix.Apply(normalVector, qbRT::FWDTFORM) - globalOrigin;
+				// qbVector<double> globalOrigin = m_transformMatrix.Apply(localOrigin, qbRT::FWDTFORM);
+				// localNormal = m_transformMatrix.Apply(normalVector, qbRT::FWDTFORM) - globalOrigin;
+				// localNormal.Normalize();
+				localNormal = m_transformMatrix.ApplyNorm(normalVector);
 				localNormal.Normalize();
 
 				// Return the base color.

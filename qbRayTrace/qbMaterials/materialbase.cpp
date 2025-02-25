@@ -83,6 +83,12 @@ qbVector<double> qbRT::MaterialBase::ComputeDiffuseColor(const std::vector<std::
 		diffuseColor.SetElement(1, green * baseColor.GetElement(1));
 		diffuseColor.SetElement(2, blue * baseColor.GetElement(2));
 	}
+	else
+	{
+		// The ambient light condition.
+		for (int i = 0; i < 3; ++i)
+			diffuseColor.SetElement(i, (m_ambientColor.GetElement(i) * m_ambientIntensity) * baseColor.GetElement(i));
+	}
 
 	// Return the material color.
 	return diffuseColor;

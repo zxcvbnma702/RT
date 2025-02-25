@@ -25,6 +25,7 @@
 
 #include "scene.hpp"
 #include "./qbMaterials/simplematerial.hpp"
+#include "./qbMaterials/simplerefractive.hpp"
 
 // The constructor.
 qbRT::Scene::Scene()
@@ -42,8 +43,8 @@ qbRT::Scene::Scene()
 	// **************************************************************************************
 	// Setup ambient lightling.
 	// **************************************************************************************
-	// qbRT::MaterialBase::m_ambientColor = std::vector<double>{1.0, 1.0, 1.0};
-	// qbRT::MaterialBase::m_ambientIntensity = 0.2;
+	qbRT::MaterialBase::m_ambientColor = std::vector<double>{1.0, 1.0, 1.0};
+	qbRT::MaterialBase::m_ambientIntensity = 0.2;
 
 	// **************************************************************************************
 	// Create some textures.
@@ -71,7 +72,7 @@ qbRT::Scene::Scene()
 	auto sphereMaterial = std::make_shared<qbRT::SimpleMaterial>(qbRT::SimpleMaterial());
 	auto sphereMaterial2 = std::make_shared<qbRT::SimpleMaterial>(qbRT::SimpleMaterial());
 	auto sphereMaterial3 = std::make_shared<qbRT::SimpleMaterial>(qbRT::SimpleMaterial());
-	// auto glassMaterial = std::make_shared<qbRT::SimpleRefractive>(qbRT::SimpleRefractive());
+	auto glassMaterial = std::make_shared<qbRT::SimpleRefractive>(qbRT::SimpleRefractive());
 
 	// **************************************************************************************
 	// Setup the materials.
@@ -98,11 +99,11 @@ qbRT::Scene::Scene()
 	sphereMaterial3->m_reflectivity = 0.8;
 	sphereMaterial3->m_shininess = 32.0;
 
-	// glassMaterial->m_baseColor = qbVector<double>{std::vector<double>{0.7, 0.7, 0.2}};
-	// glassMaterial->m_reflectivity = 0.25;
-	// glassMaterial->m_shininess = 32.0;
-	// glassMaterial->m_translucency = 0.75;
-	// glassMaterial->m_ior = 1.333;
+	glassMaterial->m_baseColor = qbVector<double>{std::vector<double>{1.0, 1.0, 1.0}};
+	glassMaterial->m_reflectivity = 0.25;
+	glassMaterial->m_shininess = 32.0;
+	glassMaterial->m_translucency = 0.5;
+	glassMaterial->m_ior = 1.333;
 
 	// **************************************************************************************
 	// Create and setup objects.
@@ -142,11 +143,11 @@ qbRT::Scene::Scene()
 	sphere3->AssignMaterial(sphereMaterial3);
 
 	// **************************************************************************************
-	// auto sphere4 = std::make_shared<qbRT::ObjSphere>(qbRT::ObjSphere());
-	// sphere4->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{2.0, -1.25, 0.25}},
-	// 										 qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
-	// 										 qbVector<double>{std::vector<double>{0.75, 0.75, 0.75}}});
-	// sphere4->AssignMaterial(glassMaterial);
+	auto sphere4 = std::make_shared<qbRT::Cylinder>(qbRT::Cylinder());
+	sphere4->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{2.0, -1.25, 0.25}},
+											 qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
+											 qbVector<double>{std::vector<double>{0.75, 0.75, 0.75}}});
+	sphere4->AssignMaterial(glassMaterial);
 
 	// **************************************************************************************
 	// Put the objects into the scene.
@@ -156,7 +157,7 @@ qbRT::Scene::Scene()
 	m_objectList.push_back(sphere);
 	m_objectList.push_back(sphere2);
 	m_objectList.push_back(sphere3);
-	// m_objectList.push_back(sphere4);
+	m_objectList.push_back(sphere4);
 
 	// **************************************************************************************
 	// Construct and setup the lights.

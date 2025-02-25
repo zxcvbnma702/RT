@@ -30,6 +30,7 @@ qbRT::GTform::GTform()
 		identity matrices. */
 	m_fwdtfm.SetToIdentity();
 	m_bcktfm.SetToIdentity();
+	ExtractLinearTransform();
 }
 
 qbRT::GTform::~GTform()
@@ -40,6 +41,7 @@ qbRT::GTform::~GTform()
 qbRT::GTform::GTform(const qbVector<double> &translation, const qbVector<double> &rotation, const qbVector<double> &scale)
 {
 	SetTransform(translation, rotation, scale);
+	ExtractLinearTransform();
 }
 
 // Construct from a pair of matrices.
@@ -54,6 +56,7 @@ qbRT::GTform::GTform(const qbMatrix2<double> &fwd, const qbMatrix2<double> &bck)
 
 	m_fwdtfm = fwd;
 	m_bcktfm = bck;
+	ExtractLinearTransform();
 }
 
 // Function to set the transform.
@@ -179,6 +182,17 @@ qbVector<double> qbRT::GTform::Apply(const qbVector<double> &inputVector, bool d
 	return outputVector;
 }
 
+qbVector<double> qbRT::GTform::ApplyNorm(const qbVector<double> &inputVector)
+{
+	qbVector<double> result = m_lintfm * inputVector;
+	return result;
+}
+
+qbMatrix2<double> qbRT::GTform::GetNormalTransform()
+{
+    return m_lintfm;
+}
+
 // Overload operators.
 namespace qbRT
 {
@@ -236,6 +250,21 @@ void qbRT::GTform::Print(const qbMatrix2<double> &matrix)
 		}
 		std::cout << std::endl;
 	}
+}
+
+// Function to return the normal transform.
+void qbRT::GTform::ExtractLinearTransform()
+{
+	for(int i = 0; i < 3; ++i)
+	{
+		for(int j = 0; j < 3; ++j)
+		{
+			m_lintfm.SetElement(i, j, m_fwdtfm.GetElement(i, j));
+		}
+	}
+
+	m_lintfm.Inverse();
+	m_lintfm = m_lintfm.Transpose();
 }
 
 // Function to print vectors.

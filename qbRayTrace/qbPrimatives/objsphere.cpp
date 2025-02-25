@@ -78,20 +78,51 @@ bool qbRT::ObjSphere::TestIntersection(const qbRT::Ray &castRay, qbVector<double
 			// Determine which point of intersection was closest to the camera.
 			if (t1 < t2)
 			{
-				poi = bckRay.m_point1 + (vhat * t1);
+				if (t1 > 0.0)
+				{
+					poi = bckRay.m_point1 + (vhat * t1);
+				}
+				else
+				{
+					if (t2 > 0.0)
+					{
+						poi = bckRay.m_point1 + (vhat * t2);
+					}
+					else
+					{
+						return false;
+					}
+				}
 			}
 			else
 			{
-				poi = bckRay.m_point1 + (vhat * t2);
+				if (t2 > 0.0)
+				{
+					poi = bckRay.m_point1 + (vhat * t2);
+				}
+				else
+				{
+					if (t1 > 0.0)
+					{
+						poi = bckRay.m_point1 + (vhat * t1);
+					}
+					else
+					{
+						return false;
+					}
+				}
 			}
 
 			// Transform the intersection point back into world coordinates.
 			intPoint = m_transformMatrix.Apply(poi, qbRT::FWDTFORM);
 
 			// Compute the local normal (easy for a sphere at the origin!).
-			qbVector<double> objOrigin = qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}};
-			qbVector<double> newObjOrigin = m_transformMatrix.Apply(objOrigin, qbRT::FWDTFORM);
-			localNormal = intPoint - newObjOrigin;
+			// qbVector<double> objOrigin = qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}};
+			// qbVector<double> newObjOrigin = m_transformMatrix.Apply(objOrigin, qbRT::FWDTFORM);
+			// localNormal = intPoint - newObjOrigin;
+			// localNormal.Normalize();
+			qbVector<double> normalVector = poi;
+			localNormal = m_transformMatrix.ApplyNorm(normalVector);
 			localNormal.Normalize();
 
 			// Return the base color.
@@ -102,7 +133,7 @@ bool qbRT::ObjSphere::TestIntersection(const qbRT::Ray &castRay, qbVector<double
 			double y = poi.GetElement(1);
 			double z = poi.GetElement(2);
 
-			double u = atan2(sqrtf(pow(x, 2.0) + pow(y, 2.0)) , z);
+			double u = atan2(sqrtf(pow(x, 2.0) + pow(y, 2.0)), z);
 			double v = atan2(y, x);
 
 			// if(x < 0){
@@ -114,7 +145,6 @@ bool qbRT::ObjSphere::TestIntersection(const qbRT::Ray &castRay, qbVector<double
 
 			m_uvCoords.SetElement(0, u);
 			m_uvCoords.SetElement(1, v);
-
 		}
 
 		return true;
