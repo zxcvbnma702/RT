@@ -41,6 +41,7 @@
 #include "./qbTextures/flat.hpp"
 #include "./qbTextures/checker.hpp"
 #include "./qbTextures/image.hpp"
+#include "./qbRayMarch/torus.hpp"
 
 namespace qbRT
 {

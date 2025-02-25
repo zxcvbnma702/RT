@@ -11,7 +11,11 @@
 
 ![alt text](image-71.png)
 
-[reference](www.youtube.com/c/QuantitativeBytes)
+![alt text](image-99.png)
+
+本次分享就是讲述如何通过光线追踪渲染出如图片效果
+
+[参考学习的视频链接在这里](www.youtube.com/c/QuantitativeBytes)
 
 ## 窗口
 
@@ -69,7 +73,7 @@ $$
 \mathbf{V}_\text{plane} = \mathbf{V} \times H
 $$
 
-todo 画图
+> U 和 V 向量确实定义了投影屏平面，并且这个平面是与由 Up 向量和 Alignment 向量 (m_alignmentVector) 形成的平面是垂直的。
 
 > 图像平面（Image Plane）是指在计算机图形学和计算机视觉领域中，虚拟摄像机在空间中生成图像的那个平面。它是场景中从三维到二维投影的平面，简单来说，就是摄像机所“看到”的东西最终映射到这个平面上形成的图像。
 
@@ -149,7 +153,7 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 
 ![alt text](image-9.png)
 
-## GETR
+## GETR(几何变换)
 
 ![alt text](image-10.png)
 
@@ -605,6 +609,34 @@ $$
 
 ![alt text](image-85.png)
 
-## Ray Marching
+## Ray Marching(光线行进)
 
 ![alt text](image-83.png)
+
+![alt text](image-86.png)
+
+![alt text](image-87.png)
+
+![alt text](image-88.png)
+
+![alt text](image-89.png)
+
+![alt text](image-90.png)
+
+![alt text](image-91.png)
+
+## Procedural Texture(程序纹理)
+
+![alt text](image-92.png)
+
+![alt text](image-94.png)
+
+![alt text](image-93.png)
+
+![alt text](image-95.png)
+
+![alt text](image-96.png)
+
+![alt text](image-97.png)
+
+![alt text](image-98.png)

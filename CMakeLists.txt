@@ -56,6 +56,11 @@ set(SOURCE_FILES
     qbRayTrace/qbTextures/checker.cpp
     qbRayTrace/qbTextures/image.cpp
     qbRayTrace/qbMaterials/simplerefractive.cpp
+    qbRayTrace/qbRayMarch/cube.cpp
+    qbRayTrace/qbRayMarch/raymarchbase.cpp
+    qbRayTrace/qbRayMarch/sdfunc.cpp
+    qbRayTrace/qbRayMarch/sphere.cpp
+    qbRayTrace/qbRayMarch/torus.cpp
 )
 
 add_executable(RT ${SOURCE_FILES})

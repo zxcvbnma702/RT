@@ -59,7 +59,7 @@ qbRT::Scene::Scene()
 							   0.0,
 							   qbVector<double>{std::vector<double>{16.0, 16.0}});
 
-	imageTexture->LoadImage("/Library/Projects/Vulkan/RT/image.png");
+	imageTexture->LoadImage("/Library/Projects/Vulkan/RT/image1.png");
 	imageTexture->SetTransform(qbVector<double>{std::vector<double>{0.0, 0.0}},
 							   0.0,
 							   qbVector<double>{std::vector<double>{1.0, 1.0}});
@@ -104,11 +104,11 @@ qbRT::Scene::Scene()
 	coneMaterial->m_reflectivity = 0.15;
 	coneMaterial->m_shininess = 32.0;
 
-	glassMaterial->m_baseColor = qbVector<double>{std::vector<double>{1.0, 1.0, 1.0}};
+	glassMaterial->m_baseColor = qbVector<double>{std::vector<double>{0.7, 0.7, 0.2}};
 	glassMaterial->m_reflectivity = 0.25;
 	glassMaterial->m_shininess = 32.0;
 	glassMaterial->m_translucency = 0.5;
-	glassMaterial->m_ior = 1.333;
+	glassMaterial->m_ior = 1.57;
 
 	// **************************************************************************************
 	// Create and setup objects.
@@ -118,6 +118,18 @@ qbRT::Scene::Scene()
 										   qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
 										   qbVector<double>{std::vector<double>{16.0, 16.0, 1.0}}});
 	floor->AssignMaterial(floorMaterial);
+
+	auto wall = std::make_shared<qbRT::ObjPlane>(qbRT::ObjPlane());
+	wall->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{-2.0, 0.0, 1.0}},
+										  qbVector<double>{std::vector<double>{0.0, M_PI / 2.0, 0.0}},
+										  qbVector<double>{std::vector<double>{16.0, 16.0, 1.0}}});
+	wall->AssignMaterial(floorMaterial);
+
+	auto wall2 = std::make_shared<qbRT::ObjPlane>(qbRT::ObjPlane());
+	wall2->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{0.0, 6.0, 1.0}},
+										   qbVector<double>{std::vector<double>{M_PI / 2.0, 0.0, 0.0}},
+										   qbVector<double>{std::vector<double>{16.0, 16.0, 1.0}}});
+	wall2->AssignMaterial(floorMaterial);
 
 	// **************************************************************************************
 	auto imagePlane = std::make_shared<qbRT::ObjPlane>(qbRT::ObjPlane());
@@ -149,16 +161,29 @@ qbRT::Scene::Scene()
 
 	// **************************************************************************************
 	auto cylinder = std::make_shared<qbRT::Cylinder>(qbRT::Cylinder());
-	cylinder->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{2.0, -1.25, 0.25}},
-											 qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
-											 qbVector<double>{std::vector<double>{0.75, 0.75, 0.75}}});
+	cylinder->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{1.0, -2.0, 0.25}},
+											  qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
+											  qbVector<double>{std::vector<double>{0.25, 0.25, 0.25}}});
 	cylinder->AssignMaterial(glassMaterial);
+
+	auto cone = std::make_shared<qbRT::Cone>(qbRT::Cone());
+	cone->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{1.0, -2.0, 0.50}},
+										  qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
+										  qbVector<double>{std::vector<double>{0.25, 0.25, 0.25}}});
+	cone->AssignMaterial(coneMaterial);
 
 	auto box = std::make_shared<qbRT::Box>(qbRT::Box());
 	box->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
-										qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
-										qbVector<double>{std::vector<double>{0.5, 2.0, 1.0}}});
+										 qbVector<double>{std::vector<double>{0.0, 0.0, 0.0}},
+										 qbVector<double>{std::vector<double>{0.5, 2.0, 1.0}}});
 	box->AssignMaterial(coneMaterial);
+
+	auto rmTorus = std::make_shared<qbRT::RM::Torus>(qbRT::RM::Torus());
+	rmTorus->SetRadii(0.7, 0.3);
+	rmTorus->SetTransformMatrix(qbRT::GTform{qbVector<double>{std::vector<double>{2.0, -1.25, 0.25}},
+											 qbVector<double>{std::vector<double>{-M_PI / 2.0, 0.0, 0.0}},
+											 qbVector<double>{std::vector<double>{0.75, 0.75, 0.75}}});
+	rmTorus->AssignMaterial(glassMaterial);
 
 	// **************************************************************************************
 	// Put the objects into the scene.
@@ -168,8 +193,12 @@ qbRT::Scene::Scene()
 	m_objectList.push_back(sphere);
 	m_objectList.push_back(sphere2);
 	m_objectList.push_back(sphere3);
-	m_objectList.push_back(box);
+	// m_objectList.push_back(box);
+	m_objectList.push_back(cone);
 	m_objectList.push_back(cylinder);
+	m_objectList.push_back(rmTorus);
+	m_objectList.push_back(wall);
+	m_objectList.push_back(wall2);
 
 	// **************************************************************************************
 	// Construct and setup the lights.
@@ -177,12 +206,12 @@ qbRT::Scene::Scene()
 	m_lightList.push_back(std::make_shared<qbRT::PointLight>(qbRT::PointLight()));
 	m_lightList.at(0)->m_location = qbVector<double>{std::vector<double>{3.0, -10.0, -5.0}};
 	m_lightList.at(0)->m_color = qbVector<double>{std::vector<double>{1.0, 1.0, 1.0}};
-	m_lightList.at(0)->m_intensity = 4.0;
+	m_lightList.at(0)->m_intensity = 16.0;
 
 	m_lightList.push_back(std::make_shared<qbRT::PointLight>(qbRT::PointLight()));
 	m_lightList.at(1)->m_location = qbVector<double>{std::vector<double>{0.0, -10.0, -5.0}};
 	m_lightList.at(1)->m_color = qbVector<double>{std::vector<double>{1.0, 1.0, 1.0}};
-	m_lightList.at(1)->m_intensity = 2.0;
+	m_lightList.at(1)->m_intensity = 8.0;
 }
 
 // Function to perform the rendering.
