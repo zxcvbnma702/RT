@@ -13,15 +13,21 @@
 
 ![alt text](image-99.png)
 
+![alt text](image-6.png)
+
+![alt text](image-7.png)
+
 本次分享就是讲述如何通过光线追踪渲染出如图片效果
 
 [参考学习的视频链接在这里](www.youtube.com/c/QuantitativeBytes)
 
-## 窗口
+## 窗口&代码
 
-使用 SDL2 创建窗口
+**使用 SDL2 创建窗口** + **Cmake组织 c++ 代码**
 
 > SDL（Simple DirectMedia Layer）是一个跨平台的多媒体开发库，用于访问低级硬件（如图形、声音和输入设备）。
+
+> CMake 是一个跨平台的开源构建系统，它被设计用来管理复杂的软件构建过程。CMake 使用名为 CMakeLists.txt 的配置文件来生成原生的构建工具文件（如 Makefile 或项目文件），从而使开发者可以使用自己熟悉的构建工具。
 
 ## Camera （摄像机）
 
@@ -137,59 +143,402 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 // 方向为从摄像机位置 (0, 0, 0) 指向图像平面上的坐标 (1, 1, -1) 的向量。
 ```
 
-## Ray - Sphere Intersections（光线-球体🍌）
-
-![alt text](image-5.png)
-
-![alt text](image-4.png)
-
-![alt text](image-6.png)
-
-![alt text](image-7.png)
-
-## Point Light （点光源）
-
-![alt text](image-8.png)
-
-![alt text](image-9.png)
-
 ## GETR(几何变换)
 
-![alt text](image-10.png)
+- In general, a geometric transform can be defined as:
 
-> 单位矩阵
+$$
+\begin{bmatrix}
+\hat{v}_1 \\
+\hat{v}_2 \\
+\hat{v}_3
+\end{bmatrix}
+=\begin{bmatrix}
+a_{11} & a_{12} & a_{13} \\
+a_{21} & a_{22} & a_{23} \\
+a_{31} & a_{32} & a_{33}
+\end{bmatrix}
+\begin{bmatrix}
+v_1 \\
+v_2 \\
+v_3
+\end{bmatrix}
+$$
 
-![alt text](image-11.png)
+- Where the matrix \( \mathbf{A} \) defines the transform that is applied to the vector \( \vec{v} \) to give \( \hat{\vec{v}} \).
 
-> 缩放变换
+- But, how do we calculate the values of \( a_{11} \) through \( a_{33} \) that we need to achieve the transform that we want?
 
-![alt text](image-13.png)
+### The simplest case - The identity matrix
 
-> 旋转变换
+- Let's consider the simplest case first, where \(\mathbf{A}\) is simply the identity matrix.
 
-![alt text](image-12.png)
+  $$
+  \begin{bmatrix}
+  \hat{v}_1 \\
+  \hat{v}_2 \\
+  \hat{v}_3
+  \end{bmatrix}
+  =\begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & 1 & 0 \\
+  0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  v_1 \\
+  v_2 \\
+  v_3
+  \end{bmatrix}
+  $$
+
+- Of course, this simplifies to:
+
+  $$
+  \begin{aligned}
+  \hat{v}_1 &= v_1 \\
+  \hat{v}_2 &= v_2 \\
+  \hat{v}_3 &= v_3
+  \end{aligned}
+  $$
+
+### Scaling
+
+- If we change the diagonal values to be something other than 1 we can show that this would represent a _scaling_:
+
+  $$
+  \begin{bmatrix}
+  \hat{v}_1 \\
+  \hat{v}_2 \\
+  \hat{v}_3
+  \end{bmatrix}=
+  \begin{bmatrix}
+  a_{11} & 0 & 0 \\
+  0 & a_{22} & 0 \\
+  0 & 0 & a_{33}
+  \end{bmatrix}
+  \begin{bmatrix}
+  v_1 \\
+  v_2 \\
+  v_3
+  \end{bmatrix}
+  $$
+
+- Now this equations to:
+
+  $$
+  \begin{aligned}
+  \hat{v}_1 &= a_{11} v_1 \\
+  \hat{v}_2 &= a_{22} v_2 \\
+  \hat{v}_3 &= a_{33} v_3
+  \end{aligned}
+  $$
+
+- So the values \(a_{11}\), \(a_{22}\) and \(a_{33}\) define a scaling in each of the three axes.
+
+### Rotation
+
+- Ok, so _scaling_ is easy, but what about other transforms such as _rotation_?
+- Let’s look at rotation in just two dimensions to start with. A two-dimensional vector can be rotated using:
+
+  $$
+  \begin{bmatrix}
+  \hat{v}_1 \\
+  \hat{v}_2
+  \end{bmatrix}=
+  \begin{bmatrix}
+  \cos \theta & -\sin \theta \\
+  \sin \theta & \cos \theta
+  \end{bmatrix}
+  \begin{bmatrix}
+  v_1 \\
+  v_2
+  \end{bmatrix}
+  $$
+
+- Which equates to:
+
+  $$
+  \begin{aligned}
+  \hat{v}_1 &= v_1 \cos \theta - v_2 \sin \theta \\
+  \hat{v}_2 &= v_1 \sin \theta + v_2 \cos \theta
+  \end{aligned}
+  $$
+
+  Where \( \theta \) is the angle of the rotation.
+- This will rotate the original vector \( \vec{v} \) about the origin to give the new vector \( \hat{\vec{v}} \).
 
 ![alt text](image-14.png)
 
-![alt text](image-15.png)
+- So, we need to compute the rotation about each axis, \( \theta_x \), \( \theta_y \) and \( \theta_z \) in turn.
+- To form each matrix, we only need to think about the 2D case that we saw before and the particular axis that we wish to rotate about. So, the 2D rotation matrix we saw before was:
 
-![alt text](image-16.png)
+  $$
+  \begin{bmatrix}
+  \cos \theta & -\sin \theta \\
+  \sin \theta & \cos \theta 
+  \end{bmatrix}
+  $$
 
-![alt text](image-17.png)
+- To rotate about the \( x \) axis by \( \theta_x \), we wish to keep the \( x \) axis constant, so we can form the transform matrix as:
 
-![alt text](image-18.png)
+  $$
+  \mathbf{A}_x =
+  \begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & \cos \theta_x & -\sin \theta_x \\
+  0 & \sin \theta_x & \cos \theta_x 
+  \end{bmatrix}
+  $$
 
-> 平移变换
+- Notice that this is just the 2D rotation matrix superimposed onto the identity matrix such that the first element, \( a_{11} \), is left unchanged.
 
-![alt text](image-19.png)
+- And the other two axes are similar, giving:
 
-![alt text](image-20.png)
+  $$
+  \mathbf{A}_x =
+  \begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & \cos \theta_x & -\sin \theta_x \\
+  0 & \sin \theta_x & \cos \theta_x 
+  \end{bmatrix}
+  $$
 
-![alt text](image-21.png)
+  $$
+  \mathbf{A}_y =
+  \begin{bmatrix}
+  \cos \theta_y & 0 & \sin \theta_y \\
+  0 & 1 & 0 \\
+  -\sin \theta_y & 0 & \cos \theta_y
+  \end{bmatrix}
+  $$
 
-![alt text](image-22.png)
+  $$
+  \mathbf{A}_z =
+  \begin{bmatrix}
+  \cos \theta_z & -\sin \theta_z & 0 \\
+  \sin \theta_z & \cos \theta_z & 0 \\
+  0 & 0 & 1
+  \end{bmatrix}
+  $$
 
-![alt text](image-23.png)
+- Ok, so that’s not too bad. But what if I want to rotate about more than just one axis at a time?
+- Luckily, we can combine the transform matrices together by simply taking the matrix product. So, our complete rotation, in all three axes, would be given by:
+
+  $$
+  \mathbf{A} = \mathbf{A}_z(\theta_z) \mathbf{A}_y(\theta_y) \mathbf{A}_x(\theta_x)
+  $$
+
+  $$
+  \mathbf{A} =
+  \begin{bmatrix}
+  \cos \theta_z & -\sin \theta_z & 0 \\
+  \sin \theta_z & \cos \theta_z & 0 \\
+  0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  \cos \theta_y & 0 & \sin \theta_y \\
+  0 & 1 & 0 \\
+  -\sin \theta_y & 0 & \cos \theta_y
+  \end{bmatrix}
+  \begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & \cos \theta_x & -\sin \theta_x \\
+  0 & \sin \theta_x & \cos \theta_x
+  \end{bmatrix}
+  $$
+
+- What makes this method so powerful is actually the way that we can combine transforms together into a single transformation matrix.
+- So, we can combine scaling with rotation in just the same way:
+
+  $$
+  \mathbf{A} = 
+  \begin{bmatrix}
+  s_x & 0 & 0 \\
+  0 & s_y & 0 \\
+  0 & 0 & s_z
+  \end{bmatrix}
+  \begin{bmatrix}
+  \cos \theta_z & -\sin \theta_z & 0 \\
+  \sin \theta_z & \cos \theta_z & 0 \\
+  0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  \cos \theta_y & 0 & \sin \theta_y \\
+  0 & 1 & 0 \\
+  -\sin \theta_y & 0 & \cos \theta_y
+  \end{bmatrix}
+  \begin{bmatrix}
+  1 & 0 & 0 \\
+  0 & \cos \theta_x & -\sin \theta_x \\
+  0 & \sin \theta_x & \cos \theta_x
+  \end{bmatrix}
+  $$
+
+- In which case the new vector, \( \hat{\vec{v}} \) would be:
+
+  $$
+  \hat{\vec{v}} = \mathbf{A} \vec{v}
+  $$
+
+- This would rotate \( \vec{v} \) by \( \theta_z \), then by \( \theta_y \), then by \( \theta_x \) and finally apply the scaling.
+
+### Translation
+
+- But wait! What about translation?
+- Good question! To translate a vector by another vector, we simply add them together.
+
+  $$
+  \begin{bmatrix}
+  \hat{v}_1 \\
+  \hat{v}_2 \\
+  \hat{v}_3
+  \end{bmatrix}=
+  \begin{bmatrix}
+  v_1 \\
+  v_2 \\
+  v_3
+  \end{bmatrix}
+  +
+  \begin{bmatrix}
+  t_x \\
+  t_y \\
+  t_z
+  \end{bmatrix}
+  $$
+
+- Giving:
+
+  $$
+  \begin{aligned}
+  \hat{v}_1 &= v_1 + t_x \\
+  \hat{v}_2 &= v_2 + t_y \\
+  \hat{v}_3 &= v_3 + t_z
+  \end{aligned}
+  $$
+
+- That’s easy enough, but we want to be able to combine all of our transforms together into a single matrix. How can we do that for translation?
+
+- There is a way that we can combine translation with the other transforms, using **homogeneous coordinates(齐次坐标)**.
+- To do this, we need to add an extra element to our vector \( \vec{v} \), which then becomes:
+
+  $$
+  \vec{v} =
+  \begin{bmatrix}
+  v_1 \\
+  v_2 \\
+  v_3 \\
+  1
+  \end{bmatrix}
+  $$
+
+- And, we modify our transform matrices in a similar way to make them \( 4 \times 4 \):
+
+  $$
+  \mathbf{A} =
+  \begin{bmatrix}
+  a_{11} & a_{12} & a_{13} & 0 \\
+  a_{21} & a_{22} & a_{23} & 0 \\
+  a_{31} & a_{32} & a_{33} & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+  $$
+
+- Let's ignore any other transforms for now and work this through for a pure translation:
+
+  $$
+  \begin{bmatrix}
+  \hat{v}_1 \\
+  \hat{v}_2 \\
+  \hat{v}_3 \\
+  1
+  \end{bmatrix}=
+  \begin{bmatrix}
+  1 & 0 & 0 & t_x \\
+  0 & 1 & 0 & t_y \\
+  0 & 0 & 1 & t_z \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  v_1 \\
+  v_2 \\
+  v_3 \\
+  1
+  \end{bmatrix}
+  $$
+
+  $$
+  \begin{aligned}
+  \hat{v}_1 &= v_1 + 0v_2 + 0v_3 + t_x \\
+  \hat{v}_2 &= 0v_1 + v_2 + 0v_3 + t_y \\
+  \hat{v}_3 &= 0v_1 + 0v_2 + v_3 + t_z
+  \end{aligned}
+  $$
+
+### Combined transforms
+
+- Now, we can combine all of our transforms together if we express them in homogenous coordinates:
+
+  $$
+  \mathbf{S}(x, y, z) = 
+  \begin{bmatrix}
+  s_x & 0 & 0 & 0 \\
+  0 & s_y & 0 & 0 \\
+  0 & 0 & s_z & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}, \quad
+  \mathbf{T}(x, y, z) = 
+  \begin{bmatrix}
+  1 & 0 & 0 & t_x \\
+  0 & 1 & 0 & t_y \\
+  0 & 0 & 1 & t_z \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+  $$
+
+  $$
+  \mathbf{R}_x =
+  \begin{bmatrix}
+  1 & 0 & 0 & 0 \\
+  0 & \cos \theta_x & -\sin \theta_x & 0 \\
+  0 & \sin \theta_x & \cos \theta_x & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}, \quad
+  \mathbf{R}_y =
+  \begin{bmatrix}
+  \cos \theta_y & 0 & \sin \theta_y & 0 \\
+  0 & 1 & 0 & 0 \\
+  -\sin \theta_y & 0 & \cos \theta_y & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+  $$
+
+  $$
+  \mathbf{R}_z =
+  \begin{bmatrix}
+  \cos \theta_z & -\sin \theta_z & 0 & 0 \\
+  \sin \theta_z & \cos \theta_z & 0 & 0 \\
+  0 & 0 & 1 & 0 \\
+  0 & 0 & 0 & 1
+  \end{bmatrix}
+  $$
+
+- And we can combine these together into a single transform matrix:
+
+  $$
+  \mathbf{A} = \mathbf{T}(x, y, z) \mathbf{S}(x, y, z) \mathbf{R}_x \mathbf{R}_y \mathbf{R}_z
+  $$
+
+- And our new vector can be found simply by:
+
+  $$
+  \hat{\vec{v}} = \mathbf{A} \vec{v}
+  $$
+
+- What’s great about this is that we can recover \( \vec{v} \) from \( \hat{\vec{v}} \) quite simply by multiplying by the inverse of \( \mathbf{A} \):
+
+  $$
+  \vec{v} = \mathbf{A}^{-1} \hat{\vec{v}}
+  $$
 
 目前定义的球体
 
@@ -209,13 +558,96 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 
 ![alt text](image-28.png)
 
-![alt text](image-29.png)
+### 平面交点推导
 
-![alt text](image-30.png)
+**平面的方程：**
+$$
+\vec{x} = \vec{p_0} + \vec{p}_{01} u + \vec{p}_{02} v
+$$
 
-![alt text](image-31.png)
+其中，$\vec{p}_0$ 是平面上的一个点。$\vec{p}_{01}$ 和 $\vec{p}_{02}$ 是平面上两个方向向量。$u$ 和 $v$ 是标量参数。
 
-![alt text](image-32.png)
+**直线的方程：**
+
+$$
+\vec{l} = \vec{a} + t \vec{k}
+$$
+
+其中，$\vec{a}$ 是直线上的一个点。$\vec{k}$ 是直线的方向向量。$t$ 是标量参数。
+
+**交点：**
+在交点处，坐标必须同时满足平面的方程和直线的方程。因此：
+$$
+\vec{a} + t \vec{k} = \vec{p}_0 + \vec{p}_{01} u + \vec{p}_{02} v
+$$
+
+**矩阵形式：**
+通过重排方程，可以将 $\vec{a}$ 表示为方向向量和参数的组合：
+$$
+\vec{a} = \begin{bmatrix}
+   -\vec{k} & \vec{p}_{01} & \vec{p}_{02}
+\end{bmatrix}
+\begin{bmatrix}
+    t \\
+    u \\
+    v
+\end{bmatrix}
+$$
+
+这个公式给出了包含三个未知数 $t$，$u$ 和 $v$ 的三元线性方程组，通过求解这个方程组可以找到直线与平面的确切交点。
+
+我们将所有对象定义在它们自己的局部坐标系中。
+这意味着我们可以将平面固定在 $XY$ 平面上，并将其中心放在原点。
+
+因此，我们可以定义：
+
+$$
+\vec{p}_0 = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}
+$$
+
+$$
+\vec{p}_{01} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}
+$$
+
+$$
+\vec{p}_{02} = \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}
+$$
+
+我们可以重新写出交点方程为：
+
+$$
+\vec{a} = u \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} + v \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix} - t\vec{k}
+$$
+
+或者分量形式表达为：
+$$
+\begin{align*}
+a_x &= u - k_x t\\
+a_y &= v - k_y t\\
+a_z &= -k_z t
+\end{align*}
+$$
+
+因此，可以解出：
+$$
+t = \frac{a_z}{-k_z}
+$$
+
+一旦我们知道 $t$，我们就可以将其代入直线的方程中：
+$$
+\vec{l} = \vec{a} + t \vec{k}
+$$
+
+这里，$\vec{l}$ 现在将是直线和平面的交点。
+我们也可以很容易地计算出 $u$ 和 $v$ 的值：
+$$
+\begin{align*}
+u &= a_x + k_x t\\
+v &= a_y + k_y t
+\end{align*}
+$$
+
+$u$ 和 $v$ 的值在后面会展现出其非常有用的性质。
 
 ### shadow
 
@@ -227,113 +659,117 @@ RT::Ray(m_CameraPosition, screenWorldCoordinate)
 
 3. 计算阴影光线: 从交点（Intersection Point）向光源发出一条光线（Shadow Ray）。
 检测遮挡物: 检查阴影光线在其路径上是否与其他物体相交。如果有物体阻挡了这条光线，则交点处于阴影之中，意味着该点不能直接受到光照。
-光照计算:
 
 > 如果阴影光线到达光源时没有遇到任何遮挡物，则该点直接受到光照，可以继续计算光照贡献（包括直接光照和反射光照）。
 如果阴影光线被遮挡，则认为该点处于阴影中，来自该光源的光不会对该点产生直接光照。
 
-## Material（布林冯模型）
+todo: 代码在哪？忘了
 
-![alt text](image-33.png)
+## Ray - Sphere Intersections（光线-球体🍌）
 
-布林冯反射模型
+![alt text](image-5.png)
 
-> 将光分为3个部分，分别是环境光照(ambient lighting)，漫反射光照(diffuse reflection，高光(specular highlights)
+![alt text](image-4.png)
 
-![alt text](image-39.png)
-
-[games101](https://www.bilibili.com/video/BV1X7411F744/?p=7&vd_source=b3b87210888ec87be647603921054a36)
-
-- 觀測向量 v
-- 表面法線 n
-- 光照方向 l
-
-> 漫反射分量
+图中公式表示了光线的参数方程：
 
 $$
-    L_d = K_d \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}})
+\vec{x} = \vec{p_1} + t \vec{v}
 $$
 
-$L_d$（扩散反射光强度，Diffuse Light Intensity）：这是物体接收到并反射出的光线的强度，对于每个表面点来讲，它是通过漫反射计算出来的光线强度。
+其中：
 
-$K_d$（漫反射係數嗎，Diffuse Reflectance Coefficient）：光到达物体表面后，能量会被吸收一部分（不同材质的物体对不同波长的光线吸收率是不一样的），剩下的会被反射出来，漫反射系数即定义了不被物体所吸收的光照颜色`
-diffuseColor`，即物体表现出的颜色。
+$\vec{p_1}$ 是光线的起点（或起点坐标 $(p_{1x}, p_{1y}, p_{1z})$)。
+$\vec{v}$ 是光线方向单位向量 $(v_x, v_y, v_z)$。
+$t$ 是参数（标量）。
 
-$\frac{E}{r^2}$(光照能量衰減係數)：光照能量衰减系数，抵达物体表面的能量与光源和着色点距离平方成反比。
-
-$\max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}})$：表面着色点接收到的能量正比于$\mathbf{\hat{n}} \cdot \mathbf{\hat{l}}$。为了避免负值情况使用max做了最小值的限定
-
-![alt text](image-40.png)
-
-![alt text](image-35.png)
-
-> 高光
+假设球体的中心在 $\vec{C}$ 位置，半径为 $R$，则球体的方程可以表示为：
 
 $$
-L_s = K_s \frac{E}{r^2} \max(0, \cos \theta)^p = K_s \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})^p
+|\vec{x} - \vec{C}|^2 = R^2
 $$
 
-$L_s$ ：镜面反射光强度 (Specular Light Intensity)。这是物体表面由于镜面反射作用反射的光强度。
-
-$K_s$ ：镜面反射系数 (Specular Reflectance Coefficient)。这是物体材质属性，表示物体表面对镜面反射光的反射能力。值越高，镜面反射效果越强。
-
-$E$ ：光源光强 (Light Intensity)。这是来自光源的光的强度。
-
-$r$ ：光源到表面点的距离 (Distance from Light Source to Surface Point)。光源与物体表面点之间的直线距离。公式中用 $r^2$ 是为了计算距离引起的光衰减。
-
-$\cos \theta$ ：光源方向与镜面反射方向之间的余弦值。这是光源方向和镜面反射方向向量之间夹角的余弦。对于镜面反射，镜面反射方向 (R) 通常是视角方向的反射。
-
-$\mathbf{\hat{n}} \cdot \mathbf{\hat{h}}$ ：单位表面法线向量 $\mathbf{\hat{n}}$ 与半程向量 $\mathbf{\hat{h}}$ 的点积。
-
-$\mathbf{\hat{n}}$：表面法线向量 (Normal Vector)。这是垂直于表面的单位向量，表示表面方向。
-$\mathbf{\hat{h}}$：半程向量 (Halfway Vector)。这是光源方向向量 $\mathbf{\hat{l}}$ 和观察方向向量 $\mathbf{\hat{v}}$ 的归一化和。公式为：
-$$
-\mathbf{\hat{h}} = \frac{\mathbf{\hat{l}} + \mathbf{\hat{v}}}{|\mathbf{\hat{l}} + \mathbf{\hat{v}}|}
-$$
-$p$ ：高光指数 (Shininess Coefficient)，也称为高光锐度指数或镜面反射指数 (Specular Exponent)。这个参数控制高光的锐利程度。值越大，镜面反射的高光区域越小越尖锐，值越小，高光区域越大越柔和。
-
-$\max(0, \cos \theta)$ 和 $\max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})$：这些函数确保了只有当光线方向与法线方向和半程向量方向成锐角时才有正的贡献，因为负值（光线在表面后方）不产生反射强度。
-
-![alt text](image-34.png)
-
-> 环境光
-
-布林冯模型假设环境光是一个常量
+为了找到交点，需要求解这个方程。我们可以将光线方程带入球体方程，如前面的推导所示：
 
 $$
- L_a = K_a E_a
+|\vec{p_1} + t\vec{v} - \vec{C}|^2 = R^2
 $$
 
-![alt text](image-36.png)
-
-> 总结
-
-将三种光照作用效果叠加在一起，就可以得到近似的物理光照效果
+这展开后会成为一个二次方程：
 
 $$
-I \\ = I_{\text{ambient}} + I_{\text{diffuse}} + I_{\text{specular}} \\ = K_a E_a + K_d \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}}) + K_s \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})^p
+\left( \vec{v} \cdot \vec{v} \right) t^2 + 2 \left( \vec{v} \cdot (\vec{p_1} - \vec{C}) \right) t + \left( \vec{p_1} - \vec{C} \right) \cdot \left( \vec{p_1} - \vec{C} \right) - R^2 = 0
 $$
 
-> 反射
+记 $\vec{L} = \vec{p_1} - \vec{C}$，其中 $\vec{L}$ 是光线起点到球体中心的向量，则上述方程可以简化为：
 
 $$
-\mathbf{R} = \mathbf{V} - 2 (\mathbf{V} \cdot \mathbf{N}) \mathbf{N}
+\left( \vec{v} \cdot \vec{v} \right) t^2 + 2 \left( \vec{L} \cdot \vec{v} \right) t + \left( \vec{L} \cdot \vec{L} \right) - R^2 = 0
 $$
 
-$\mathbf{V}$ 是入射光线的方向向量，应该是一个单位向量。
-$\mathbf{N}$ 是反射面的法线向量，也是一个单位向量，通常指向介质外部。
-$\mathbf{V} \cdot \mathbf{N}$ 表示向量的点积运算。
-$\mathbf{R}$ 是反射光线的方向向量，也是一个单位向量。
+为了方便计算，我们求解的是在圆心在坐标轴心的单位球，则上述方程就能简化为
 
-![alt text](image-37.png)
+$$
+t^2 + 2 \cdot \vec{p_1} \cdot t + \vec{p_1} \cdot \vec{p_1} - 1 = 0
+$$
 
-![alt text](image-38.png)
+求解这个标准的二次方程 $at^2 + bt + c = 0$，其中：
+
+$$
+\begin{align*}
+a &= \vec{v} \cdot \vec{v} = 1 \\
+b &= 2 (\vec{L} \cdot \vec{v}) = 2 \cdot \vec{p_1} \cdot \vec{v} \\
+c &= \left( \vec{L} \cdot \vec{L} \right) - R^2 = \vec{p_1} \cdot \vec{p_1} - 1
+\end{align*}
+$$
+
+
+可以使用二次方程求根公式：
+
+$$
+t = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+带入具体的系数 $(a, b, c)$：
+
+$$
+t = \frac{-2 \cdot \vec{p_1} \pm \sqrt{(2 \cdot \vec{p_1})^2 - 4(\vec{p_1} \cdot \vec{p_1} - 1)}}{2}
+$$
 
 ## Cone and Cylinder
 
-![alt text](image-41.png)
+如果我们能够为物体的表面形成适当的数学表达式，我们可以在光线追踪器中实现任何形状。
+这些表达式将以 $x, y$ 和 $z$ 为变量，表示表面上的点。
+我们可以使用直线的方程（我们的光线投射到场景中）表示如下：
+$$
+\begin{bmatrix}
+x \\
+y \\
+z
+\end{bmatrix} =
+\begin{bmatrix}
+p_x \\
+p_y \\
+p_z
+\end{bmatrix} + t
+\begin{bmatrix}
+v_x \\
+v_y \\
+v_z
+\end{bmatrix}
+$$
 
-![alt text](image-42.png)
+这将给出 $x, y$ 和 $z$ 以 $t$ 为变量的表达式：
+$$
+\begin{aligned}
+x = p_x + t v_x\\
+y = p_y + t v_y\\
+z = p_z + t v_z
+\end{aligned}
+$$
+
+我们将这些表达式代入表面的方程中并求解 $t$。
+然后我们使用这个 $t$ 的值，与原始的直线方程结合起来，确定交点的位置。
 
 ![alt text](image-43.png)
 
@@ -375,7 +811,13 @@ $$
 
 推导出
 
-$$ a = v_x^2 + v_y^2 $$ $$ b = 2(p_xv_x + p_yv_y) $$ $$c=p_x^2 + p_y^2 -r^2 $$
+$$
+\begin{align*}
+a &= v_x^2 + v_y^2\\
+b &= 2(p_xv_x + p_yv_y)\\
+c &= p_x^2 + p_y^2 -r^2\\
+\end{align*}
+$$
 
 根据求根公式
 
@@ -385,37 +827,213 @@ $$ t = \frac{-B \pm \sqrt{B^2 - 4AC}}{2A} $$
 
 ![alt text](image-48.png)
 
-![alt text](image-49.png)
+因此，我们可以像之前处理球体和平面一样使用这个方法。
+当我们进行相交测试时，我们首先从全局坐标系中的投射光线 $r$ 开始。
+
+然后我们将这个光线变换到物体的局部坐标系中：
+$$
+\hat{r} = \mathbf{T}^{-1} r
+$$
+
+这里，$\mathbf{T}$ 是物体定义的前向变换，$\mathbf{T}^{-1}$ 是其逆变换。
+
+我们可以使用刚才描述的过程来测试相交，从而得到相交点在局部坐标系中的表示 $p_{poi_{local}}$。
+
+最后，我们将这个点变换回全局坐标系：
+$$
+p_{poi_{global}} = \mathbf{T} p_{poi_{local}}
+$$
 
 ![alt text](image-50.png)
 
-![alt text](image-51.png)
+我们采用与圆柱体相交相同的方法进行测试：
+$$
+(px + tv_x)^2 + (py + tv_y)^2 = (pz + tv_z)^2
+$$
+
+展开并整理方程：
+
+$$
+t^2 v_x^2 + 2t p_x v_x + p_x^2 + t^2 v_y^2 + 2t p_y v_y + p_y^2 - t^2 v_z^2 - 2t p_z v_z - p_z^2 = 0
+$$
+
+合并相同次数的项：
+
+$$
+t^2 (v_x^2 + v_y^2 - v_z^2) + 2t (p_x v_x + p_y v_y - p_z v_z) + p_x^2 + p_y^2 - p_z^2 = 0
+$$
+
+这个方程形式为：
+
+$$
+t = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+其中：
+
+$$
+\begin{aligned}
+a &= v_x^2 + v_y^2 - v_z^2\\
+b &= 2(p_x v_x + p_y v_y - p_z v_z)\\
+c &= p_x^2 + p_y^2 - p_z^2
+\end{aligned}
+$$
 
 ![alt text](image-52.png)
 
 ## box(盒子)
 
-![alt text](image-73.png)
-
-![alt text](image-74.png)
-
-![alt text](image-75.png)
+由[平面推导](#平面交点推导)，我们已知了面与光线的🍌法则
 
 ![alt text](image-76.png)
 
 ![alt text](image-77.png)
 
-![alt text](image-78.png)
+| Plane | $\vec{p}_0$ | $\vec{p}_{01}$ | $\vec{p}_{02}$ |
+|-------|-------------|----------------|----------------|
+| 0     | $\left[ \begin{array}{c} 0 \ 0 \ 1 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 1 \ 0 \ 0 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 0 \ 1 \ 0 \end{array} \right]^{T}$ |
+| 1     | $\left[ \begin{array}{c} 0 \ 0 \ -1 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 1 \ 0 \ 0 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 0 \ 1 \ 0 \end{array} \right]^{T}$ |
+| 2     | $\left[ \begin{array}{c} -1 \ 0 \ 0 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 0 \ 0 \ -1 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 0 \ 1 \ 0 \end{array} \right]^{T}$ |
+| 3     | $\left[ \begin{array}{c} 1 \ 0 \ 0 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 0 \ 0 \ -1 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 0 \ 1 \ 0 \end{array} \right]^{T}$ |
+| 4     | $\left[ \begin{array}{c} 0 \ -1 \ 0 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 1 \ 0 \ 0 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 0 \ 0 \ -1 \end{array} \right]^{T}$ |
+| 5     | $\left[ \begin{array}{c} 0 \ 1 \ 0 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 1 \ 0 \ 0 \end{array} \right]^{T}$ | $\left[ \begin{array}{c} 0 \ 0 \ -1 \end{array} \right]^{T}$ |
 
-![alt text](image-79.png)
+根据这些点来计算
 
-![alt text](image-80.png)
+\[
+\begin{aligned}
+t_0 &= \frac{a_z - 1}{-k_z}, \quad t_1 = \frac{a_z + 1}{-k_z} \\
+t_2 &= \frac{a_x + 1}{-k_x}, \quad t_3 = \frac{a_x - 1}{-k_x} \\
+t_4 &= \frac{a_y + 1}{-k_y}, \quad t_5 = \frac{a_y - 1}{-k_y}
+\end{aligned}
+\]
 
-![alt text](image-81.png)
+Which then gives the \( t \) for every possible intersection between the ray and the cube. All we have to do is to decide which was the closest to the camera.
 
-![alt text](image-82.png)
+We can also compute \( u \) and \( v \) for each face:
+
+| Plane | \( u \) | \( v \) |
+|-------|---------|---------|
+| 0     | \( a_x + k_x t \) | \( a_y + k_y t \) |
+| 1     | \( a_x + k_x t \) | \( a_y + k_y t \) |
+| 2     | \( a_z - k_z t \) | \( a_y + k_y t \) |
+| 3     | \( a_z - k_z t \) | \( a_y + k_y t \) |
+| 4     | \( a_x + k_x t \) | \( a_z - k_z t \) |
+| 5     | \( a_x + k_x t \) | \( a_z - k_z t \) |
+
+Therefore, we only actually need to compute:
+
+\[
+\begin{aligned}
+a_x + k_x t \\
+a_y + k_y t \\
+a_z - k_z t \\
+\end{aligned}
+\]
+
 
 ![alt text](image-84.png)
+
+## Point Light （点光源）
+
+![alt text](image-8.png)
+
+![alt text](image-9.png)
+
+## Material（布林冯模型）
+
+![alt text](image-33.png)
+
+> 将光分为3个部分，分别是环境光照(ambient lighting)，漫反射光照(diffuse reflection，高光(specular highlights)
+
+![alt text](image-39.png)
+
+[games101](https://www.bilibili.com/video/BV1X7411F744/?p=7&vd_source=b3b87210888ec87be647603921054a36)
+
+- 觀測向量 v
+- 表面法線 n
+- 光照方向 l
+
+### 漫反射分量
+
+$$
+    L_d = K_d \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}})
+$$
+
+$L_d$（扩散反射光强度，Diffuse Light Intensity）：这是物体接收到并反射出的光线的强度，对于每个表面点来讲，它是通过漫反射计算出来的光线强度。
+
+$K_d$（漫反射係數嗎，Diffuse Reflectance Coefficient）：光到达物体表面后，能量会被吸收一部分（不同材质的物体对不同波长的光线吸收率是不一样的），剩下的会被反射出来，漫反射系数即定义了不被物体所吸收的光照颜色`
+diffuseColor`，即物体表现出的颜色。
+
+$\frac{E}{r^2}$(光照能量衰減係數)：光照能量衰减系数，抵达物体表面的能量与光源和着色点距离平方成反比。
+
+$\max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}})$：表面着色点接收到的能量正比于$\mathbf{\hat{n}} \cdot \mathbf{\hat{l}}$。为了避免负值情况使用max做了最小值的限定
+
+![alt text](image-40.png)
+
+![alt text](image-35.png)
+
+### 高光
+
+$$
+L_s = K_s \frac{E}{r^2} \max(0, \cos \theta)^p = K_s \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})^p
+$$
+
+$L_s$ ：镜面反射光强度 (Specular Light Intensity)。这是物体表面由于镜面反射作用反射的光强度。
+
+$K_s$ ：镜面反射系数 (Specular Reflectance Coefficient)。这是物体材质属性，表示物体表面对镜面反射光的反射能力。值越高，镜面反射效果越强。
+
+$E$ ：光源光强 (Light Intensity)。这是来自光源的光的强度。
+
+$r$ ：光源到表面点的距离 (Distance from Light Source to Surface Point)。光源与物体表面点之间的直线距离。公式中用 $r^2$ 是为了计算距离引起的光衰减。
+
+$\cos \theta$ ：光源方向与镜面反射方向之间的余弦值。这是光源方向和镜面反射方向向量之间夹角的余弦。对于镜面反射，镜面反射方向 (R) 通常是视角方向的反射。
+
+$\mathbf{\hat{n}} \cdot \mathbf{\hat{h}}$ ：单位表面法线向量 $\mathbf{\hat{n}}$ 与半程向量 $\mathbf{\hat{h}}$ 的点积。
+
+$\mathbf{\hat{n}}$：表面法线向量 (Normal Vector)。这是垂直于表面的单位向量，表示表面方向。
+$\mathbf{\hat{h}}$：半程向量 (Halfway Vector)。这是光源方向向量 $\mathbf{\hat{l}}$ 和观察方向向量 $\mathbf{\hat{v}}$ 的归一化和。公式为：
+$$
+\mathbf{\hat{h}} = \frac{\mathbf{\hat{l}} + \mathbf{\hat{v}}}{|\mathbf{\hat{l}} + \mathbf{\hat{v}}|}
+$$
+$p$ ：高光指数 (Shininess Coefficient)，也称为高光锐度指数或镜面反射指数 (Specular Exponent)。这个参数控制高光的锐利程度。值越大，镜面反射的高光区域越小越尖锐，值越小，高光区域越大越柔和。
+
+$\max(0, \cos \theta)$ 和 $\max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})$：这些函数确保了只有当光线方向与法线方向和半程向量方向成锐角时才有正的贡献，因为负值（光线在表面后方）不产生反射强度。
+
+![alt text](image-34.png)
+
+### 环境光
+
+布林冯模型假设环境光是一个常量
+
+$$
+ L_a = K_a E_a
+$$
+
+![alt text](image-36.png)
+
+### 总结
+
+将三种光照作用效果叠加在一起，就可以得到近似的物理光照效果
+
+$$
+I  = I_{\text{ambient}} + I_{\text{diffuse}} + I_{\text{specular}} \\ = K_a E_a + K_d \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{l}}) + K_s \frac{E}{r^2} \max(0, \mathbf{\hat{n}} \cdot \mathbf{\hat{h}})^p
+$$
+
+### 反射
+
+$$
+\mathbf{R} = \mathbf{V} - 2 (\mathbf{V} \cdot \mathbf{N}) \mathbf{N}
+$$
+
+$\mathbf{V}$ 是入射光线的方向向量，应该是一个单位向量。
+$\mathbf{N}$ 是反射面的法线向量，也是一个单位向量，通常指向介质外部。
+$\mathbf{V} \cdot \mathbf{N}$ 表示向量的点积运算。
+$\mathbf{R}$ 是反射光线的方向向量，也是一个单位向量。
+
+![alt text](image-37.png)
+
+![alt text](image-38.png)
 
 ## UV Space & Textures (uv展开 & 纹理)
 
@@ -431,13 +1049,7 @@ $$ t = \frac{-B \pm \sqrt{B^2 - 4AC}}{2A} $$
 
 ![alt text](image-55.png)
 
-![alt text](image-56.png)
-
-![alt text](image-57.png)
-
-![alt text](image-58.png)
-
-![alt text](image-59.png)
+[推导过程](#平面交点推导)
 
 ![alt text](image-60.png)
 
@@ -491,9 +1103,23 @@ $$
 
 ![alt text](image-63.png)
 
-![alt text](image-64.png)
+- We already know the \((x, y, z)\) location of the point of intersection.
+- And we can convert these into **cylindrical** coordinates using:
 
-![alt text](image-65.png)
+  $$
+  \begin{aligned}
+  u &= \tan^{-1}\left(\frac{y}{x}\right) \\
+  v &= z
+  \end{aligned}
+  $$
+
+- Note that in practice we use the $\texttt{atan2}$ function to compute \(\tan^{-1}\) because this will automatically handle the various edge cases.
+
+- So the cylinder itself is quite easy, but what about the end caps?
+- We defined these as planes, but then ignored any points more than 1 unit away from the origin giving a unit-disk shape.
+- As we have already seen, computing \((u, v)\) for a plane is very easy.
+- As the end-caps are unit disks, the task is even easier! Remember that we define objects in their own _local_ coordinate system, so the end cap will always be a disk with a radius of 1.
+- Which means that \((u, v) = (x, y)\). It’s as simple as that!
 
 ![alt text](image-66.png)
 
@@ -503,14 +1129,14 @@ $$
 
 使用 sdl_image 库，将图片像素由 uv 转化为 xy 范围
 
-> 统一调整范围
+#### 统一调整范围
 
 u 和 v 的范围在 [-1, 1] 之间，我们需要将其调整到 [0, 1] 范围内。因此采取以下步骤：
 
 $$ u' = \frac{u + 1}{2} $$
 $$ v' = \frac{v + 1}{2} $$
 
-> 转换为像素坐标
+#### 转换为像素坐标
 
 将调整后的范围 [0, 1] 转换为图像宽度和高度范围 [0, m_xSize] 和 [0, m_ySize]。
 
@@ -546,10 +1172,10 @@ $$
 1. 使用法向量表示入射和折射角的余弦
 我们有以下关系：
 $$
-\cos \theta_1 = - \vec{n} \cdot \vec{v_{incident}}
-$$
-$$
-\cos \theta_2 = - \vec{n} \cdot \vec{v_{refract}}
+\begin{aligned}
+\cos \theta_1 &= - \vec{n} \cdot \vec{v_{incident}} \\
+\cos \theta_2 &= - \vec{n} \cdot \vec{v_{refract}}  
+\end{aligned}
 $$
 
 1. 矢量形式的几何关系
@@ -558,11 +1184,12 @@ $$
 \vec{v_{incident}} = \vec{v}{\parallel} + \vec{v}{\perp}
 $$
 这里，$\vec{v}{\parallel}$ 是平行于法向量的部分，$\vec{v}{\perp}$ 是垂直于法向量的部分:
+
 $$
-\vec{v}{\parallel} = -(\vec{n} \cdot \vec{v_{incident}}) \vec{n} = -\cos \theta_1 \vec{n}
-$$
-$$
-\vec{v}{\perp} = \vec{v_{incident}} - \vec{v}{\parallel} = \vec{v_{incident}} + \cos \theta_1 \vec{n}
+\begin{aligned}
+\vec{v}{\parallel} &= -(\vec{n} \cdot \vec{v_{incident}}) \vec{n} = -\cos \theta_1 \vec{n}\\
+\vec{v}{\perp} &= \vec{v_{incident}} - \vec{v}{\parallel} = \vec{v_{incident}} + \cos \theta_1 \vec{n} 
+\end{aligned}
 $$
 
 对于折射矢量，我们有类似的分解:
@@ -608,6 +1235,8 @@ $$
 ![alt text](image-72.png)
 
 ![alt text](image-85.png)
+
+![alt text](image-7.png)
 
 ## Ray Marching(光线行进)
 
