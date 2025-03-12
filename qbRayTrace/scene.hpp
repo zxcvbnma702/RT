@@ -41,7 +41,10 @@
 #include "./qbTextures/flat.hpp"
 #include "./qbTextures/checker.hpp"
 #include "./qbTextures/image.hpp"
+#include "./qbTextures/gradient.hpp"
 #include "./qbRayMarch/torus.hpp"
+#include "./qbMaterials/simplematerial.hpp"
+#include "./qbMaterials/simplerefractive.hpp"
 
 namespace qbRT
 {

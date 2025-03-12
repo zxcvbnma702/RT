@@ -169,7 +169,7 @@ $$
 
 - But, how do we calculate the values of \( a_{11} \) through \( a_{33} \) that we need to achieve the transform that we want?
 
-### The simplest case - The identity matrix
+### 最简单情况-单位矩阵
 
 - Let's consider the simplest case first, where \(\mathbf{A}\) is simply the identity matrix.
 
@@ -201,7 +201,7 @@ $$
   \end{aligned}
   $$
 
-### Scaling
+### 缩放
 
 - If we change the diagonal values to be something other than 1 we can show that this would represent a _scaling_:
 
@@ -235,7 +235,7 @@ $$
 
 - So the values \(a_{11}\), \(a_{22}\) and \(a_{33}\) define a scaling in each of the three axes.
 
-### Rotation
+### 旋转
 
 - Ok, so _scaling_ is easy, but what about other transforms such as _rotation_?
 - Let’s look at rotation in just two dimensions to start with. A two-dimensional vector can be rotated using:
@@ -382,7 +382,7 @@ $$
 
 - This would rotate \( \vec{v} \) by \( \theta_z \), then by \( \theta_y \), then by \( \theta_x \) and finally apply the scaling.
 
-### Translation
+### 平移
 
 - But wait! What about translation?
 - Good question! To translate a vector by another vector, we simply add them together.
@@ -474,7 +474,7 @@ $$
   \end{aligned}
   $$
 
-### Combined transforms
+### 综合变换
 
 - Now, we can combine all of our transforms together if we express them in homogenous coordinates:
 
@@ -548,7 +548,7 @@ $$
 > 在3D图形学中，通常我们有一个物体的局部坐标系（例如球体的物理坐标），然后通过一系列变换（平移、旋转、缩放等），将该物体从局部坐标系转换到世界坐标系中。
 
 
-## Plane & Shadows （平面与阴影）
+## Plane（平面）
 
 ![alt text](image-25.png)
 
@@ -648,22 +648,6 @@ v &= a_y + k_y t
 $$
 
 $u$ 和 $v$ 的值在后面会展现出其非常有用的性质。
-
-### shadow
-
-1. 初次光线投射（Primary Ray Casting）:
-首先，从相机位置发射初始光线。每条光线穿过屏幕上的一个像素，并与场景中的物体进行相交测试，找到最近的交点。这一步用来判断光线击中了什么物体。
-
-2. 阴影光线投射（Shadow Ray Casting）:
-当确定初始光线与某个物体相交后，需要计算该点是否处于阴影中。为此，从交点向场景中的每个光源发射阴影光线。
-
-3. 计算阴影光线: 从交点（Intersection Point）向光源发出一条光线（Shadow Ray）。
-检测遮挡物: 检查阴影光线在其路径上是否与其他物体相交。如果有物体阻挡了这条光线，则交点处于阴影之中，意味着该点不能直接受到光照。
-
-> 如果阴影光线到达光源时没有遇到任何遮挡物，则该点直接受到光照，可以继续计算光照贡献（包括直接光照和反射光照）。
-如果阴影光线被遮挡，则认为该点处于阴影中，来自该光源的光不会对该点产生直接光照。
-
-todo: 代码在哪？忘了
 
 ## Ray - Sphere Intersections（光线-球体🍌）
 
@@ -1012,6 +996,22 @@ $$
 
 ![alt text](image-36.png)
 
+### 阴影
+
+1. 初次光线投射（Primary Ray Casting）:
+首先，从相机位置发射初始光线。每条光线穿过屏幕上的一个像素，并与场景中的物体进行相交测试，找到最近的交点。这一步用来判断光线击中了什么物体。
+
+2. 阴影光线投射（Shadow Ray Casting）:
+当确定初始光线与某个物体相交后，需要计算该点是否处于阴影中。为此，从交点向场景中的每个光源发射阴影光线。
+
+3. 计算阴影光线: 从交点（Intersection Point）向光源发出一条光线（Shadow Ray）。
+检测遮挡物: 检查阴影光线在其路径上是否与其他物体相交。如果有物体阻挡了这条光线，则交点处于阴影之中，意味着该点不能直接受到光照。
+
+> 如果阴影光线到达光源时没有遇到任何遮挡物，则该点直接受到光照，可以继续计算光照贡献（包括直接光照和反射光照）。
+如果阴影光线被遮挡，则认为该点处于阴影中，来自该光源的光不会对该点产生直接光照。
+
+todo: 代码在哪？忘了
+
 ### 总结
 
 将三种光照作用效果叠加在一起，就可以得到近似的物理光照效果
@@ -1170,6 +1170,9 @@ $$
 设入射方向的单位矢量为 $\vec{v_{incident}}$，折射方向的单位矢量为 $\vec{v_{refract}}$，法向量为 $\vec{n}$。
 
 1. 使用法向量表示入射和折射角的余弦
+
+> 法向量与入射光线方向相反
+
 我们有以下关系：
 $$
 \begin{aligned}
@@ -1240,19 +1243,107 @@ $$
 
 ## Ray Marching(光线行进)
 
-![alt text](image-83.png)
+### 形状如何定义
 
-![alt text](image-86.png)
+- 回想一下，我们最初是用隐式形式定义球体的，如下所示：
+  $$ x^2 + y^2 + z^2 - r^2 = 0 $$
+
+- 如果我们定义：
+  $$ f(x, y, z) = x^2 + y^2 + z^2 - r^2 $$
+
+- 那么这告诉我们，对于球体表面上的任何点 \((x, y, z)\)，函数 \(f(x, y, z)\) 的值将是 0。
+
+- 对于光线追踪，我们只需将其与线的方程（光线的方程）结合起来：
+  $$
+  \begin{bmatrix}
+  x \\
+  y \\
+  z 
+  \end{bmatrix}
+  = \begin{bmatrix}
+  p_x \\
+  p_y \\
+  p_z
+  \end{bmatrix} + t
+  \begin{bmatrix}
+  v_x \\
+  v_y \\
+  v_z
+  \end{bmatrix}
+  $$
+
+- 得到：
+  $$
+  (p_x + t v_x)^2 + (p_y + t v_y)^2 + (p_z + t v_z)^2 - r^2 = 0
+  $$
+  然后我们可以求解 \( t \)。
+
+> 光线行进（Ray Marching）是一种利用有符号距离函数（Signed Distance Function, SDF）的技术。SDF提供了从空间中任意点到最近的几何体表面的距离。正值表示点在几何体外部，负值表示点在内部，零表示点在表面上。通过SDF，光线行进能够有效地处理和渲染复杂的几何形状，而无需求解隐式方程。
+
+1. 基本概念
+Raymarching的核心思想是在场景中投射光线，并通过在光线方向上逐步前进来检测与对象的交互。在每一步中，检查光线是否接触到了对象的表面或结构，并根据检测到的结果决定下一步的动作。
+
+1. 签名距离函数（SDF）
+签名距离函数（Signed Distance Function, SDF）是Raymarching的关键。SDF表示从空间中的任何一点到最接近的对象表面的距离，并带有正负号来区分点是在对象内部还是外部。
+
+1. 步进过程
+在光线步进过程中，使用SDF判断光线从当前点到对象表面的最短距离，并将光线沿该方向移动这个距离，然后重复这一过程直到：
+
+- 光线与对象表面相交（距离足够小）
+- 光线超出预定义的最大步数或距离范围（视为不相交）。
 
 ![alt text](image-87.png)
 
 ![alt text](image-88.png)
 
-![alt text](image-89.png)
+### 光线行进和有符号距离函数
 
-![alt text](image-90.png)
+- 注意球体的有符号距离函数与隐式方程不完全相同。
+- **隐式方程：**
+  $$ f(x, y, z) = x^2 + y^2 + z^2 - r^2 $$
+  这描述了球体表面的点集合，其中 \( r \) 是球体的半径。
 
-![alt text](image-91.png)
+- **有符号距离函数：**
+  $$ f(x, y, z) = \sqrt{x^2 + y^2 + z^2} - r $$
+  这个函数在空间中的任意一点处提供到球体表面的有符号距离。正值表示点在球体外部，负值表示点在球体内部，0表示点在球体表面。
+
+- **解释：**
+  - 原因在于SDF给出了每个点 \( f(x, y, z) \) 与几何体之间的距离，而隐式方程给出了点是否在几何体上的数学描述。
+
+### 圆环形状。
+
+- 在这种情况下，SDF 由以下公式给出：
+
+  $$
+  \begin{aligned}
+    p &= \sqrt{x^2 + y^2} - r_{\text{major}} \\
+    f(x, y, z) &= \sqrt{p^2 + z^2} - r_{\text{minor}} 
+  \end{aligned}
+  $$
+
+- 请注意，这与隐式方程有很大的不同：
+  $$ 
+  f(x, y, z) = (x^2 + y^2 + z^2 + r_{\text{major}}^2 - r_{\text{minor}}^2)^2 - 4r_{\text{major}}^2(x^2 + y^2)
+  $$
+
+- 事实证明，通常情况下，没有将隐式方程和有符号距离函数相互转换的正式方法。
+- 在大多数情况下，SDF 需要根据特定对象的几何特性推导出来。
+
+- 一种大有优势的方法是，我们可以为各种没有等价隐式方程的形状推导出有符号距离函数。
+- 例如，下面的SDF描述了一个立方体：
+
+- 在一个点 \( p \) 处：
+  $$
+  \begin{align*}
+  a_x &= |p_x| - 1.0, \quad b_x = \argmax(a_x, 0.0) \\
+  a_y &= |p_y| - 1.0, \quad b_y = \argmax(a_y, 0.0) \\
+  a_z &= |p_z| - 1.0, \quad b_z = \argmax(a_z, 0.0) \\
+  f_{\text{int}} &= \argmin(\argmax(a_x, \argmax(a_y, a_z)), 0.0) \\
+  f_{\text{ext}} &= \sqrt{b_x^2 + b_y^2 + b_z^2} \\
+  f(x, y, z) &= f_{\text{int}} + f_{\text{ext}}
+  \end{align*}
+  $$
+
 
 ## Procedural Texture(程序纹理)
 
@@ -1269,3 +1360,5 @@ $$
 ![alt text](image-97.png)
 
 ![alt text](image-98.png)
+
+![alt text](image-10.png)

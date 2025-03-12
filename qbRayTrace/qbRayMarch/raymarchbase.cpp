@@ -65,6 +65,7 @@ bool qbRT::RM::RayMarchBase::TestIntersection(const qbRT::Ray &castRay, qbVector
             intPoint = m_transformMatrix.Apply(currentLoc, qbRT::FWDTFORM);
 
             // Compute the local normal.
+            // 通过在六个方向上采样SDF并计算差值来近似法线向量
             qbVector<double> surfaceNormal{3};
             qbVector<double> x1 = currentLoc - m_xDisp;
             qbVector<double> x2 = currentLoc + m_xDisp;

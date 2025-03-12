@@ -1,9 +1,16 @@
 #include "checker.hpp"
+#include "./flat.hpp"
 
 qbRT::Texture::Checker::Checker()
 {
-    m_color1 = qbVector<double>{std::vector<double>{1.0, 1.0, 1.0, 1.0}};
-    m_color2 = qbVector<double>{std::vector<double>{0.2, 0.2, 0.2, 1.0}};
+    qbRT::Texture::Flat color1;
+    qbRT::Texture::Flat color2;
+
+    color1.SetColor(qbVector<double>{std::vector<double>{1.0, 1.0, 1.0, 1.0}});
+    color2.SetColor(qbVector<double>{std::vector<double>{0.2, 0.2, 0.2, 1.0}});
+
+    m_p_color1 = std::make_shared<qbRT::Texture::Flat>(color1);
+    m_p_color2 = std::make_shared<qbRT::Texture::Flat>(color2);
 }
 
 qbRT::Texture::Checker::~Checker()
@@ -33,11 +40,11 @@ qbVector<double> qbRT::Texture::Checker::GetColor(const qbVector<double> &uvCoor
     // 判断所在的格子是黑格还是白格，并赋予相应的颜色
     if (check % 2 == 0)
     {
-        localColor = m_color1; // 偶数格使用颜色1
+        localColor = m_p_color1->GetColor(uvCoords); // 偶数格使用颜色1
     }
     else
     {
-        localColor = m_color2; // 奇数格使用颜色2
+        localColor = m_p_color2->GetColor(uvCoords); // 奇数格使用颜色2
     }
 
     // 返回计算得到的颜色
@@ -46,6 +53,18 @@ qbVector<double> qbRT::Texture::Checker::GetColor(const qbVector<double> &uvCoor
 
 void qbRT::Texture::Checker::SetColor(const qbVector<double> &inputColor1, const qbVector<double> &inputColor2)
 {
-    m_color1 = inputColor1;
-    m_color2 = inputColor2;
+    auto color1 = std::make_shared<qbRT::Texture::Flat>(qbRT::Texture::Flat());
+    auto color2 = std::make_shared<qbRT::Texture::Flat>(qbRT::Texture::Flat());
+
+    color1 -> SetColor(inputColor1);
+    color2 -> SetColor(inputColor2);
+
+    m_p_color1 = color1;
+    m_p_color2 = color2;
+}
+
+void qbRT::Texture::Checker::SetColor(const std::shared_ptr<qbRT::Texture::TextureBase> &inputColor1, const std::shared_ptr<qbRT::Texture::TextureBase> &inputColor2)
+{
+    m_p_color1 = inputColor1;
+    m_p_color2 = inputColor2;
 }

@@ -55,6 +55,8 @@ set(SOURCE_FILES
     qbRayTrace/qbTextures/flat.cpp
     qbRayTrace/qbTextures/checker.cpp
     qbRayTrace/qbTextures/image.cpp
+    qbRayTrace/qbTextures/colormap.cpp
+    qbRayTrace/qbTextures/gradient.cpp
     qbRayTrace/qbMaterials/simplerefractive.cpp
     qbRayTrace/qbRayMarch/cube.cpp
     qbRayTrace/qbRayMarch/raymarchbase.cpp

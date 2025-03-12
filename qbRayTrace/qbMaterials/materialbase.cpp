@@ -195,3 +195,29 @@ void qbRT::MaterialBase::AssignTexture(const std::shared_ptr<qbRT::Texture::Text
 	m_textureList.push_back(inputTexture);
 	m_hasTexture = true;
 }
+
+qbVector<double> qbRT::MaterialBase::GetTextureColor(const qbVector<double> &uvCoords)
+{
+	qbVector<double> outputColor{4};
+
+	if (m_textureList.size() > 1)
+	{
+		for (auto currentTexture : m_textureList)
+		{
+			BlendColors(outputColor, currentTexture->GetColor(uvCoords));
+		}
+	}
+	else
+	{
+		outputColor = m_textureList.at(0)->GetColor(uvCoords);
+	}
+
+	return outputColor;
+}
+
+// Function to blend two colors.
+void qbRT::MaterialBase::BlendColors(qbVector<double> &color1, const qbVector<double> &color2)
+{
+	// 根据透明度混合两种颜色
+	color1 = (color2 * color2.GetElement(3)) + (color1 * (1.0 - color2.GetElement(3)));
+}

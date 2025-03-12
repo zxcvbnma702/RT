@@ -72,6 +72,12 @@ namespace qbRT
 		// Function to assign a texture.
 		void AssignTexture(const std::shared_ptr<qbRT::Texture::TextureBase> &inputTexture);
 
+		// Function to get the texture color.
+		qbVector<double> GetTextureColor(const qbVector<double> &uvCoords);
+
+		// Function to blend two colors.
+		void BlendColors(qbVector<double> &color1, const qbVector<double> &color2);
+
 	public:
 		// Counter for the number of relection rays.
 		inline static int m_maxReflectionRays;
